@@ -11,7 +11,7 @@
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "cypress": "cypress open",
     "test": "jest --watch",
-    "test:ci": "jest",
+    "test:ci": "jest --passWithNoTests",
     "migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
     "db:push": "npx dotenv -e .env.local -- prisma db push",
     "migrate:reset": "npx dotenv -e .env.local -- prisma migrate reset",
