@@ -1,38 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Streetlaw.eu project
 
-## Getting Started
+This is a Next.js project that connects streetlaw.eu with streetlaw.livepreview.cz under a single web page. Since streetlaw.eu is made with WordPress, we had to create our own database, user authentication and authorization, and also a user interface that users with no knowledge of HTML/CSS/JS can use.
 
-First, run the development server:
+There are several dependencies used for this project:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Next.js
+- TypeScript
+- Next-auth
+- Bcrypt
+- Prisma
+- TinyMCE
+- TailwindCSS
+- Jest
+- Cypress
+- and a few others
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Since this project is done under GreenFoxAcademy Húlí program, it also has to fit some requirements, mainly
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- REST API
+- JWT
+- DB
+- Testing framework
+- Environment variables
+- Style guide, linter
+- CI and CD pipeline
+- Very good and comprehensive README.md, or Confluence documentation  
+  And some other more challenging ones, since we are just starting in this career path
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+While thinking of the web structure, we had to create our own database that would not only hold users and their roles but also completely remake the material and lessons database (MLD) as we did not have access to the previous code. MLD has find by keyword, either specific or by parent group, normal find input text area, and also by selecting the type of school. On top of that, there is pagination and items-per-list functionality.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Users should also be able to create posts and edit anything that is already available on the site if their role supports this. All others should be able to create at least a simple profile about them that can then be shown on the About Us page, after approval by someone with the rights to do so.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+This project is created by [Michal Hladík](https://github.com/zelwake/huli-alumn) and [Lucie Kubátová](https://github.com/luciek16)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Resources
 
-## Deploy on Vercel
+### APIs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> Not implemented yet
