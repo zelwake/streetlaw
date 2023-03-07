@@ -6,3 +6,126 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id            String  @id @default(cuid())
+  username      String
+  password      String
+  firstName     String  @map("first_name")
+  lastName      String  @map("last_name")
+  email         String?
+  roleId        Int
+  photoUrl      String? @map("photo_url")
+  description   String? @db.Text
+  passwordReset Boolean @default(false) @map("password_reset")
+
+  role            User_role  @relation(fields: [roleId], references: [id])
+  createdPosts    Post[]     @relation("postCreator")
+  changedPosts    Post[]     @relation("postChangedBy")
+  createdPages    Page[]     @relation("pageCreator")
+  changedPages    Page[]     @relation("pageChangedBy")
+  createdMaterial Material[] @relation("materialCreator")
+  changedMaterial Material[] @relation("materialChangedBy")
+}
+
+model User_role {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
+}
+
+model Post {
+  id          String    @id
+  urlPath     String    @map("url_path")
+  category    String
+  creatorId   String
+  createAt    DateTime  @map("created_at")
+  changed     Boolean   @default(false)
+  changedById String    @map("changed_by")
+  changedAt   DateTime? @map("changed_at")
+
+  creator   User @relation("postCreator", fields: [creatorId], references: [id])
+  changedBy User @relation("postChangedBy", fields: [changedById], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Page_category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  pages Page[]
+}
+
+model Page {
+  id          String    @id
+  urlPath     String    @map("url_path")
+  categoryId  Int
+  creatorId   String
+  createAt    DateTime  @map("created_at")
+  changed     Boolean   @default(false)
+  changedById String    @map("changed_by")
+  changedAt   DateTime? @map("changed_at")
+
+  creator       User          @relation("pageCreator", fields: [creatorId], references: [id])
+  changedBy     User          @relation("pageChangedBy", fields: [changedById], references: [id])
+  Page_category Page_category @relation(fields: [categoryId], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Material_category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  materials Material[]
+}
+
+model Material {
+  id          String                @id
+  urlPath     String                @map("url_path")
+  category    Int
+  author      String
+  time        String
+  creatorId   String
+  createAt    DateTime              @map("created_at")
+  changed     Boolean               @default(false)
+  changedById String                @map("changed_by")
+  changedAt   DateTime?             @map("changed_at")
+  keywords    Keyword_to_Material[]
+
+  categoryName Material_category @relation(fields: [category], references: [id])
+  creator      User              @relation("materialCreator", fields: [creatorId], references: [id])
+  changedBy    User              @relation("materialChangedBy", fields: [changedById], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Keyword {
+  id         Int                   @id @default(autoincrement())
+  word       String
+  materials  Keyword_to_Material[]
+  categories Keyword_to_Category[]
+}
+
+model Keyword_category {
+  id       Int                   @id @default(autoincrement())
+  word     String
+  keywords Keyword_to_Category[]
+}
+
+model Keyword_to_Material {
+  materialId String
+  keywordId  Int
+  Material   Material @relation(fields: [materialId], references: [id])
+  Keyword    Keyword  @relation(fields: [keywordId], references: [id])
+
+  @@id([materialId, keywordId])
+}
+
+model Keyword_to_Category {
+  keywordId        Int              @map("keyword_id")
+  categoryId       Int              @map("category_id")
+  Keyword          Keyword          @relation(fields: [keywordId], references: [id])
+  Keyword_category Keyword_category @relation(fields: [categoryId], references: [id])
+
+  @@id([keywordId, categoryId])
+}
