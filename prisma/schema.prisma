@@ -34,41 +34,44 @@ model User_role {
   users User[]
 }
 
+model Post_category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
+}
+
 model Post {
   id          String    @id
   urlPath     String    @map("url_path")
-  category    String
+  categoryId  Int
+  title       String
+  detail      String
   creatorId   String
-  createAt    DateTime  @map("created_at")
+  createAt    DateTime  @default(now()) @map("created_at")
   changed     Boolean   @default(false)
   changedById String    @map("changed_by")
   changedAt   DateTime? @map("changed_at")
 
-  creator   User @relation("postCreator", fields: [creatorId], references: [id])
-  changedBy User @relation("postChangedBy", fields: [changedById], references: [id])
+  creator       User          @relation("postCreator", fields: [creatorId], references: [id])
+  changedBy     User          @relation("postChangedBy", fields: [changedById], references: [id])
+  Post_category Post_category @relation(fields: [categoryId], references: [id])
 
   @@index([creatorId, changedById])
 }
 
-model Page_category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  pages Page[]
-}
-
 model Page {
   id          String    @id
-  urlPath     String    @map("url_path")
-  categoryId  Int
+  urlPath     String    @map("url_path") @unique
+  title       String
+  detail      String
   creatorId   String
-  createAt    DateTime  @map("created_at")
+  createAt    DateTime  @default(now()) @map("created_at")
   changed     Boolean   @default(false)
   changedById String    @map("changed_by")
   changedAt   DateTime? @map("changed_at")
 
-  creator       User          @relation("pageCreator", fields: [creatorId], references: [id])
-  changedBy     User          @relation("pageChangedBy", fields: [changedById], references: [id])
-  Page_category Page_category @relation(fields: [categoryId], references: [id])
+  creator   User @relation("pageCreator", fields: [creatorId], references: [id])
+  changedBy User @relation("pageChangedBy", fields: [changedById], references: [id])
 
   @@index([creatorId, changedById])
 }
@@ -86,7 +89,7 @@ model Material {
   author      String
   time        String
   creatorId   String
-  createAt    DateTime              @map("created_at")
+  createAt    DateTime              @default(now()) @map("created_at")
   changed     Boolean               @default(false)
   changedById String                @map("changed_by")
   changedAt   DateTime?             @map("changed_at")
