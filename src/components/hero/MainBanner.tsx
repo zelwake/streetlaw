@@ -25,9 +25,13 @@ const MainBanner = () => {
       </div>
 
       {/* top green line */}
-      <div className="bg-streetlaw-500 h-12 w-[750px] absolute top-0 left-0"></div>
+      <div className="bg-streetlaw-500 h-12 w-fit absolute rounded-r-3xl top-0 left-0">
+        <h2 className="text-2xl font-semibold text-streetlaw-500 select-none px-5 text-right">
+          {imageText}
+        </h2>
+      </div>
       {/* bottom green line */}
-      <div className="bg-streetlaw-500 h-12 w-[750px] absolute bottom-0 right-0 flex items-center justify-end">
+      <div className="bg-streetlaw-500 h-12 w-fit absolute bottom-0 right-0 rounded-l-3xl flex items-center justify-end">
         {/* text inside bottom line */}
         <h2 className="text-2xl font-semibold text-white px-5">{imageText}</h2>
       </div>

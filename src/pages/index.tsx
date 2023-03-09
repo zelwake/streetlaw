@@ -22,6 +22,9 @@ export default function Home() {
         </section>
         <section className="mt-16">
           <h2 className="text-5xl font-semibold">Aktuality</h2>
+          <ul>
+            <li></li>
+          </ul>
         </section>
       </main>
     </>

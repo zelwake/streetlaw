@@ -5,14 +5,14 @@ import RollMenu from './RollMenu'
 
 const Header = () => {
   return (
-    <header className="absolute w-full flex">
+    <header className="fixed z-10 w-full flex">
       {/* Logo */}
       <Link href="/">
         <Image src="/logo.svg" alt="StreetLaw logo" width="80" height="80" />
       </Link>
 
       {/* Menu */}
-      <nav className="grow flex justify-between h-10 items-center shadow-sl">
+      <nav className="grow flex bg-white justify-between h-10 items-center shadow-sl">
         {/* Left side */}
         <div>
           <RollMenu name="Street Law" />
