@@ -1,12 +1,11 @@
+import { splitDate } from '@/scripts/splitDate'
 import { News } from '@projectType/componentTypes'
 
 const News = ({ date, title, abstract }: News) => {
-  const day = date.getDay()
-  const month = date.getMonth()
-  const year = date.getFullYear()
+  const { day, month, year } = splitDate(date)
 
   return (
-    <li className="w-full max-h-52 flex justify-between pt-10">
+    <li className="w-full max-h-60 flex justify-between pt-10">
       <div className="w-32 h-32 bg-streetlaw-500 text-white text-center flex flex-col justify-center">
         <p className="text-5xl font-bold">{day}</p>
         <p className="text-xl font-semibold">{month}</p>

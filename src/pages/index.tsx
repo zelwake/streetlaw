@@ -1,8 +1,42 @@
 import MainBanner from '@/components/hero/MainBanner'
 import Info from '@/components/NumberText/Info'
+import News from '@/components/NumberText/News'
 import Header from '@/components/WebLayout/Header'
 
 export default function Home() {
+  const news = [
+    {
+      date: new Date(2022, 9, 25),
+      title: 'Kurzy pro učitele v zimním semestru 2022/2023',
+      abstract:
+        'Pro zájemce z řad učitelů jsme si připravili na podzim hned tři akreditované kurzy! Více informací a návod, jak se   přihlásit, naleznete na jednotlivých dkazovaných stránkách. Didaktika práva dne 6. 10. 2022 Základy soukromého práva dne 3. 11. 2022 Základy veřejného práva dne dne 14. 11. 2022',
+    },
+    {
+      date: new Date(2022, 8, 1),
+      title: 'Street Law v Pražském deníku',
+      abstract:
+        'Po delší době vyšel v médiích nový článek o programu Street Law. V pondělí 1. srpna 2022 jste si mohli přečíst rozhovor s našimi dvěma členkami, Zuzkou Vanýskovou a Aničkou Lukešovou, o našich akcích nebo třeba o tom, proč je s právem důležité seznamovat už studenty středních škol.',
+    },
+    {
+      date: new Date(2022, 3, 8),
+      title: 'Street Law Univerzita pro SŠ studenty',
+      abstract:
+        'V březnu a dubnu se odehraje druhý ročník Street Law univerzity pro studenty a studentky středních škol. V té budete mít možnost zažít právo jinak, než jak jste zvyklí ze školních lavic. A třeba Vám to pomůže rozhodnout se ke studiu práva i na univerzitě opravdové! Projekt Street Law možná znáte ze své střední školy. […]',
+    },
+    {
+      date: new Date(2022, 3, 7),
+      title: 'Nabídka lidskoprávních workshopů pro školy',
+      abstract:
+        'OD 8. 4. 2022 JIŽ NENÍ MOŽNÉ SE O WORKSHOP PŘIHLÁSIT. V průběhu března až června nabízíme školám uspořádání půldenního workshopu o lidských právech. Interaktivní formou studentům představíme základní informace o lidských právech, vyzkouší si práci s Listinou základních práv a svobod, zjistí, jak se řeší střet lidských práv a na závěr se utkají v […]',
+    },
+    {
+      date: new Date(2022, 1, 17),
+      title: 'Workshopy pro ZŠ Suchdol',
+      abstract:
+        'V lednu 2022 jsme po delší odmlce způsobené pandemií onemocnění covid-19 uskutečnily celkem čtyři workshopy pro ZŠ Suchdol v Praze. Pro žáky devátých ročníků jsme připravili interaktivní program o právu a morálce a také o základních spotřebitelských právech týkajících se například reklamace zboží nebo odstoupení od smlouvy ve lhůtě 14 dnů v případě distančních smluv.',
+    },
+  ]
+
   return (
     <>
       <Header />
@@ -21,32 +55,14 @@ export default function Home() {
         <section className="mt-16">
           <h2 className="text-5xl font-semibold">Aktuality</h2>
           <ul>
-            <li className="w-full max-h-52 flex justify-between pt-10">
-              <div className="w-32 h-32 bg-streetlaw-500 text-white text-center flex flex-col justify-center">
-                <p className="text-5xl font-bold">25</p>
-                <p className="text-xl font-semibold">září</p>
-                <p className="text-xl font-semibold">2022</p>
-              </div>
-              <div className="w-[1100px] shadow-sl px-6 py-5 grid grid-cols-8 grid-rows-3">
-                <h3 className="text-4xl font-semibold col-span-7">
-                  Kurzy pro učitele v zimním semestru 2022/2023
-                </h3>
-                <p className="w-[950px] text-lg text-justify col-span-7 row-start-2 row-span-2">
-                  Pro zájemce z řad učitelů jsme si připravili na podzim hned
-                  tři akreditované kurzy! Více informací a návod, jak se
-                  přihlásit, naleznete na jednotlivých odkazovaných stránkách.
-                  Didaktika práva dne 6. 10. 2022 Základy soukromého práva dne
-                  3. 11. 2022 Základy veřejného práva dne dne 14. 11. 2022
-                </p>
-                <div className="col-start-8 row-start-1 row-span-3 flex justify-end items-center">
-                  <div className="bg-streetlaw-500 w-10 h-10 rounded-full relative">
-                    <button className="text-white text-4xl font-semibold absolute left-[10px] bottom-1">
-                      &gt;
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
+            {news.map((single, index) => (
+              <News
+                key={index}
+                date={single.date}
+                title={single.title}
+                abstract={single.abstract}
+              />
+            ))}
           </ul>
         </section>
       </main>
