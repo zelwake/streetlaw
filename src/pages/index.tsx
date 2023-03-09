@@ -15,13 +15,13 @@ export default function Home() {
             „Zažít právo jinak. Hravě a interaktivně. S právníky.“
           </h2>
         </section>
-        <section className="mt-9 flex gap-5 justify-between">
+        <section className="mt-9 flex justify-between">
           <Info number="6125" text="středoškoláků prošlo našimi akcemi" />
           <Info number="362" text="právníků prošlo naším programem" />
           <Info number="186" text="uspořádaných simulovaných soudů" />
         </section>
-        <section>
-          <h2>Aktuality:</h2>
+        <section className="mt-16">
+          <h2 className="text-5xl font-semibold">Aktuality</h2>
         </section>
       </main>
     </>
