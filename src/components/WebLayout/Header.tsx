@@ -5,7 +5,7 @@ import RollMenu from './RollMenu'
 
 const Header = () => {
   return (
-    <header className="fixed z-10 w-full flex">
+    <header className="fixed z-20 w-full flex">
       {/* Logo */}
       <Link href="/">
         <Image src="/logo.svg" alt="StreetLaw logo" width="80" height="80" />
