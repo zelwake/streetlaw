@@ -3,3 +3,6 @@
 .vscode
 node_modules
 public
+cypress
+*.json
+*.config.*
