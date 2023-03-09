@@ -7,6 +7,12 @@ export default function Home() {
       <Header />
       <main className="w-screen flex flex-col items-center pt-20">
         <MainBanner />
+        <section>
+          <p>„Zažít právo jinak. Hravě a interaktivně. S právníky.“</p>
+        </section>
+        <section>
+          <h2>Aktuality:</h2>
+        </section>
       </main>
     </>
   )
