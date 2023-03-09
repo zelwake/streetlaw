@@ -12,7 +12,7 @@ const Header = () => {
       </Link>
 
       {/* Menu */}
-      <nav className="grow flex justify-between h-12 items-center shadow-sl">
+      <nav className="grow flex justify-between h-10 items-center shadow-sl">
         {/* Left side */}
         <div>
           <RollMenu name="Street Law" />
