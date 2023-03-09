@@ -10,7 +10,7 @@ const MainBanner = () => {
   return (
     <div
       // background
-      className={`bg-streetlaw-500 w-full h-[${HEIGHT_OF_HERO}px] relative`}
+      className={`bg-streetlaw-500 w-sl h-sl relative`}
     >
       {/* photo */}
       <div className="relative h-full w-auto flex items-center justify-center">

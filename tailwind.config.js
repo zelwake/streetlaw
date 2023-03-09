@@ -11,6 +11,12 @@ module.exports = {
           500: '#A0CE57',
         },
       },
+      width: {
+        sl: '1290px',
+      },
+      height: {
+        sl: '580px',
+      },
     },
   },
   plugins: [],
