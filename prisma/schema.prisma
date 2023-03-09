@@ -61,7 +61,7 @@ model Post {
 
 model Page {
   id          String    @id
-  urlPath     String    @map("url_path") @unique
+  urlPath     String    @unique @map("url_path")
   title       String
   detail      String
   creatorId   String
