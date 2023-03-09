@@ -2,7 +2,7 @@ import useImageInfo from '@/hooks/useImageInfo'
 import Image from 'next/image'
 
 const MainBanner = () => {
-  const WIDTH_OF_HERO = 1290 // px
+  const WIDTH_OF_SITE = process.env.NEXT_PUBLIC_WIDTH_OF_SITE // px
   const HEIGHT_OF_HERO = 580 // px
 
   const [imageUrl, imageText] = useImageInfo()
@@ -10,14 +10,14 @@ const MainBanner = () => {
   return (
     <div
       // background
-      className={`bg-streetlaw-500 w-[${WIDTH_OF_HERO}px] h-[${HEIGHT_OF_HERO}px] relative`}
+      className={`bg-streetlaw-500 w-full h-[${HEIGHT_OF_HERO}px] relative`}
     >
       {/* photo */}
       <div className="relative h-full w-auto flex items-center justify-center">
         <Image
           src={'/main-page-photos/' + imageUrl}
           alt={imageText}
-          width={WIDTH_OF_HERO}
+          width={WIDTH_OF_SITE}
           height={HEIGHT_OF_HERO}
           quality={100}
           className="h-full w-auto"

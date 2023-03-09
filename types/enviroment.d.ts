@@ -4,5 +4,7 @@ declare namespace NodeJS {
     readonly NEXT_AUTH_SECRET: string
 
     readonly DATABASE_URL: string
+
+    readonly NEXT_PUBLIC_WIDTH_OF_SITE: number
   }
 }
