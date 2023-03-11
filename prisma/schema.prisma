@@ -6,3 +6,191 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id            String  @id @default(cuid())
+  username      String
+  password      String
+  firstName     String  @map("first_name")
+  lastName      String  @map("last_name")
+  email         String?
+  roleId        Int
+  photoUrl      String? @map("photo_url")
+  description   String? @db.Text
+  passwordReset Boolean @default(false) @map("password_reset")
+
+  role            User_role  @relation(fields: [roleId], references: [id])
+  createdPosts    Post[]     @relation("postCreator")
+  changedPosts    Post[]     @relation("postChangedBy")
+  createdPages    Page[]     @relation("pageCreator")
+  changedPages    Page[]     @relation("pageChangedBy")
+  createdMaterial Material[] @relation("materialCreator")
+  changedMaterial Material[] @relation("materialChangedBy")
+  createdLesson   Lesson[]   @relation("lessonCreator")
+  changedLesson   Lesson[]   @relation("lessonChangedBy")
+}
+
+model User_role {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
+}
+
+model Post_category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
+}
+
+model Post {
+  id          String    @id
+  urlPath     String    @map("url_path")
+  categoryId  Int
+  title       String
+  detail      String
+  creatorId   String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  changed     Boolean   @default(false)
+  changedById String    @map("changed_by")
+  changedAt   DateTime? @map("changed_at")
+
+  creator       User          @relation("postCreator", fields: [creatorId], references: [id])
+  changedBy     User          @relation("postChangedBy", fields: [changedById], references: [id])
+  Post_category Post_category @relation(fields: [categoryId], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Page {
+  id          String    @id
+  urlPath     String    @unique @map("url_path")
+  title       String
+  detail      String
+  creatorId   String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  changed     Boolean   @default(false)
+  changedById String    @map("changed_by")
+  changedAt   DateTime? @map("changed_at")
+
+  creator   User @relation("pageCreator", fields: [creatorId], references: [id])
+  changedBy User @relation("pageChangedBy", fields: [changedById], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Material {
+  id           String                @id
+  urlPath      String                @map("url_path")
+  typeOfSchool String                @map("type_of_school")
+  author       String
+  time         String
+  format       String
+  published    Int
+  language     String
+  title        String
+  abstract     String
+  detail       String
+  creatorId    String
+  createAt     DateTime              @default(now()) @map("created_at")
+  changed      Boolean               @default(false)
+  changedById  String                @map("changed_by")
+  changedAt    DateTime?             @map("changed_at")
+  keywords     Keyword_to_Material[]
+
+  creator   User @relation("materialCreator", fields: [creatorId], references: [id])
+  changedBy User @relation("materialChangedBy", fields: [changedById], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Material_keyword {
+  id   Int    @id @default(autoincrement())
+  word String
+
+  materials  Keyword_to_Material[]
+  categories Keyword_to_material_category[]
+}
+
+model Keyword_material_category {
+  id   Int    @id @default(autoincrement())
+  word String
+
+  keywords Keyword_to_material_category[]
+}
+
+model Keyword_to_Material {
+  materialId String
+  keywordId  Int
+
+  Material Material         @relation(fields: [materialId], references: [id])
+  Keyword  Material_keyword @relation(fields: [keywordId], references: [id])
+
+  @@id([materialId, keywordId])
+}
+
+model Keyword_to_material_category {
+  keywordId  Int @map("keyword_id")
+  categoryId Int @map("category_id")
+
+  Keyword          Material_keyword          @relation(fields: [keywordId], references: [id])
+  Keyword_category Keyword_material_category @relation(fields: [categoryId], references: [id])
+
+  @@id([keywordId, categoryId])
+}
+
+model Lesson {
+  id           String              @id
+  urlPath      String              @map("url_path")
+  typeOfSchool String              @map("type_of_school")
+  author       String
+  time         String
+  title        String
+  abstract     String
+  detail       String
+  creatorId    String
+  createAt     DateTime            @default(now()) @map("created_at")
+  changed      Boolean             @default(false)
+  changedById  String              @map("changed_by")
+  changedAt    DateTime?           @map("changed_at")
+  keywords     Keyword_to_Lesson[]
+
+  creator   User @relation("lessonCreator", fields: [creatorId], references: [id])
+  changedBy User @relation("lessonChangedBy", fields: [changedById], references: [id])
+
+  @@index([creatorId, changedById])
+}
+
+model Lesson_keyword {
+  id   Int    @id @default(autoincrement())
+  word String
+
+  lessons    Keyword_to_Lesson[]
+  categories Keyword_to_lesson_category[]
+}
+
+model Keyword_lesson_category {
+  id   Int    @id @default(autoincrement())
+  word String
+
+  keywords Keyword_to_lesson_category[]
+}
+
+model Keyword_to_Lesson {
+  lessonId  String
+  keywordId Int
+
+  Lessons Lesson         @relation(fields: [lessonId], references: [id])
+  Keyword Lesson_keyword @relation(fields: [keywordId], references: [id])
+
+  @@id([lessonId, keywordId])
+}
+
+model Keyword_to_lesson_category {
+  keywordId  Int @map("keyword_id")
+  categoryId Int @map("category_id")
+
+  Keyword          Lesson_keyword          @relation(fields: [keywordId], references: [id])
+  Keyword_category Keyword_lesson_category @relation(fields: [categoryId], references: [id])
+
+  @@id([keywordId, categoryId])
+}
