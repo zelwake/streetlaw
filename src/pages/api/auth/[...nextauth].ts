@@ -21,13 +21,21 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        return {
-          id: '1',
-          name: 'Test',
-        }
+        console.log(credentials)
+        if (true) return null
+        else
+          return {
+            id: '1',
+            name: 'Test',
+          }
       },
     }),
   ],
+
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/error',
+  },
 
   // Enable debug messages in the console if you are having problems
   debug: false,
