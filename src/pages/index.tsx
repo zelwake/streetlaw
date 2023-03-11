@@ -1,7 +1,7 @@
-import Footer from '@/components/Footer/Footer'
 import MainBanner from '@/components/Hero/MainBanner'
 import Info from '@/components/NumberText/Info'
 import News from '@/components/NumberText/News'
+import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import { NewsType } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
