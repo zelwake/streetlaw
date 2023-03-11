@@ -1,7 +1,5 @@
-type News = {
-  date: Date
+export type NewsType = {
+  date: string
   title: string
   abstract: string
 }
-
-export type { News }

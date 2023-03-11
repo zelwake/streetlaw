@@ -13,8 +13,10 @@ export function splitDate(date: Date) {
     [11, 'listopad'],
     [12, 'prosinec'],
   ])
+
   const day = date.getDay()
   const month: string = months.get(date.getMonth()) as string
   const year = date.getFullYear()
+
   return { day, month, year }
 }
