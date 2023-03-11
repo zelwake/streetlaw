@@ -1,0 +1,6 @@
+.github/*
+.husky/*
+.next/*
+.vscode/*
+cypress/support/*
+public/*
