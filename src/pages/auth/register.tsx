@@ -22,8 +22,25 @@ export default function Register({
     email: '',
   })
 
+  const MIN_PASSWORD_LENGTH = 8
+  const MIN_USER_LENGTH = 8
+
   const postRegister = (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (values.username.trim().length <= MIN_USER_LENGTH)
+      return alert('Uživatelské jméno je kratší než 6 znaků')
+    if (values.password.trim().length <= MIN_PASSWORD_LENGTH)
+      return alert(`Heslo musí mít alespoň ${MIN_PASSWORD_LENGTH} znaků`)
+    if (!values.password.trim().match(/.+\d.+/gi))
+      return alert('Heslo neobsahuje číslo')
+    if (!values.password.trim().match(/[a-z]/g))
+      return alert('Heslo malé písmeno')
+    if (!values.password.trim().match(/[A-Z]/g))
+      return alert('Heslo velké písmeno')
+    if (!values.firstName.trim()) return alert('Jméno je prázdné')
+    if (!values.lastName.trim()) return alert('Příjmení je prázdné')
+    if (!values.email.trim()) return alert('Email je prázdný')
   }
 
   return (
