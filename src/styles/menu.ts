@@ -1,3 +1,1 @@
-const menuStyle = 'px-3 text-xl cursor-pointer font-semibold'
-
-export { menuStyle }
+export const menuStyle = 'px-3 text-xl cursor-pointer font-semibold'
