@@ -24,7 +24,7 @@ model User {
   lastName      String  @map("last_name")
   email         String  @unique
   emailVerified Boolean @default(false) @map("email_verified")
-  roleId        Int
+  roleId        Int     @default(0)
   photoUrl      String? @map("photo_url")
   description   String? @db.Text
   passwordReset Boolean @default(false) @map("password_reset")

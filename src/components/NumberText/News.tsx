@@ -1,4 +1,4 @@
-import { splitDate } from '@/scripts/splitDate'
+import { splitDate } from '@/scripts/timeDate/splitDate'
 import { NewsType } from '@projectType/componentTypes'
 
 const News = ({ date, title, abstract }: NewsType) => {

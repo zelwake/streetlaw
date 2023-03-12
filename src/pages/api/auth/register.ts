@@ -1,7 +1,11 @@
 import prisma from '@/lib/prisma'
+import { hashedPassword } from '@/scripts/hash/bcrypt'
+import { setExpirationDate } from '@/scripts/timeDate/expirationTime'
 import { validateCredentials } from '@/scripts/validateCredentials'
 import { RegisterType } from '@projectType/authTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { checkEmailInDatabase } from '../../../scripts/checkEmailInDatabase'
+import { randomHash } from '../../../scripts/hash/randomHash'
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,11 +29,7 @@ export default async function handler(
 
   //todo at some point check database if email is already present
 
-  const emailExist = await prisma.user.findUnique({
-    where: {
-      email: req.body.email,
-    },
-  })
+  const emailExist = await checkEmailInDatabase(req)
 
   if (emailExist) {
     return res.status(400).json({ error: 'Email už je registrován' })
@@ -40,8 +40,25 @@ export default async function handler(
   if (error && !success) {
     return res.status(400).json({ error })
   } else if (!error && success) {
-    //todo hash password with bcrypt
-    //todo store user in database with verification hash
+    const passwordHash = await hashedPassword(req.body.password)
+    const emailVerificationHash = randomHash()
+    const expirationTime = setExpirationDate()
+
+    await prisma.user.create({
+      data: {
+        username: req.body.username,
+        password: passwordHash,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        Verification: {
+          create: {
+            hash: emailVerificationHash,
+            expiration: expirationTime,
+          },
+        },
+      },
+    })
     //todo send mail with verification link
     return res
       .status(201)
