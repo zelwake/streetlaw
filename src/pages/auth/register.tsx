@@ -18,16 +18,16 @@ export default function Register({
   })
 
   const MIN_PASSWORD_LENGTH = 8
-  const MIN_USER_LENGTH = 8
+  const MIN_USER_LENGTH = 6
 
   const postRegister = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (values.username.trim().length <= MIN_USER_LENGTH)
+    if (values.username.trim().length < MIN_USER_LENGTH)
       return alert('Uživatelské jméno je kratší než 6 znaků')
-    if (values.password.trim().length <= MIN_PASSWORD_LENGTH)
+    if (values.password.trim().length < MIN_PASSWORD_LENGTH)
       return alert(`Heslo musí mít alespoň ${MIN_PASSWORD_LENGTH} znaků`)
-    if (!values.password.trim().match(/.+\d.+/gi))
+    if (!values.password.trim().match(/\d/))
       return alert('Heslo neobsahuje číslo')
     if (!values.password.trim().match(/[a-z]/g))
       return alert('Heslo nemá malé písmeno')
@@ -46,6 +46,7 @@ export default function Register({
     })
 
     console.log(response)
+    //todo do something afterwards
   }
 
   return (
