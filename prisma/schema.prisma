@@ -9,11 +9,13 @@ datasource db {
 
 model Verification {
   id         String   @id @default(uuid())
-  userId     String
+  username   String
+  password   String
+  firstName  String
+  lastName   String
+  email      String
   hash       String
   expiration DateTime
-
-  user User @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -23,22 +25,20 @@ model User {
   firstName     String  @map("first_name")
   lastName      String  @map("last_name")
   email         String  @unique
-  emailVerified Boolean @default(false) @map("email_verified")
   roleId        Int     @default(0)
   photoUrl      String? @map("photo_url")
   description   String? @db.Text
   passwordReset Boolean @default(false) @map("password_reset")
 
-  role            User_role      @relation(fields: [roleId], references: [id])
-  createdPosts    Post[]         @relation("postCreator")
-  changedPosts    Post[]         @relation("postChangedBy")
-  createdPages    Page[]         @relation("pageCreator")
-  changedPages    Page[]         @relation("pageChangedBy")
-  createdMaterial Material[]     @relation("materialCreator")
-  changedMaterial Material[]     @relation("materialChangedBy")
-  createdLesson   Lesson[]       @relation("lessonCreator")
-  changedLesson   Lesson[]       @relation("lessonChangedBy")
-  Verification    Verification[]
+  role            User_role  @relation(fields: [roleId], references: [id])
+  createdPosts    Post[]     @relation("postCreator")
+  changedPosts    Post[]     @relation("postChangedBy")
+  createdPages    Page[]     @relation("pageCreator")
+  changedPages    Page[]     @relation("pageChangedBy")
+  createdMaterial Material[] @relation("materialCreator")
+  changedMaterial Material[] @relation("materialChangedBy")
+  createdLesson   Lesson[]   @relation("lessonCreator")
+  changedLesson   Lesson[]   @relation("lessonChangedBy")
 }
 
 model User_role {

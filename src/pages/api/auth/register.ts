@@ -1,11 +1,11 @@
 import prisma from '@/lib/prisma'
+import { checkUserInDatabase } from '@/scripts/checkUserDatabase'
 import { hashedPassword } from '@/scripts/hash/bcrypt'
+import { randomHash } from '@/scripts/hash/randomHash'
 import { setExpirationDate } from '@/scripts/timeDate/expirationTime'
 import { validateCredentials } from '@/scripts/validateCredentials'
 import { RegisterType } from '@projectType/authTypes'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { checkEmailInDatabase } from '../../../scripts/checkEmailInDatabase'
-import { randomHash } from '../../../scripts/hash/randomHash'
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,12 +27,24 @@ export default async function handler(
 
   const body: RegisterType = req.body
 
-  //todo at some point check database if email is already present
+  try {
+    const emailExist = await checkUserInDatabase(req.body.email, 'email')
 
-  const emailExist = await checkEmailInDatabase(req)
+    if (emailExist) {
+      return res.status(400).json({ error: 'Email už je registrován' })
+    }
 
-  if (emailExist) {
-    return res.status(400).json({ error: 'Email už je registrován' })
+    //todo check username for duplicity
+    const usernameExist = await checkUserInDatabase(
+      req.body.username,
+      'username'
+    )
+
+    if (usernameExist) {
+      return res.status(400).json({ error: 'Uživatelské jméno už existuje' })
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'Internal server error' })
   }
 
   const { error, success } = validateCredentials(body)
@@ -44,24 +56,24 @@ export default async function handler(
     const emailVerificationHash = randomHash()
     const expirationTime = setExpirationDate()
 
-    await prisma.user.create({
-      data: {
-        username: req.body.username,
-        password: passwordHash,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        Verification: {
-          create: {
-            hash: emailVerificationHash,
-            expiration: expirationTime,
-          },
+    try {
+      await prisma.verification.create({
+        data: {
+          username: req.body.username,
+          password: passwordHash,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          hash: emailVerificationHash,
+          expiration: expirationTime,
         },
-      },
-    })
-    //todo send mail with verification link
-    return res
-      .status(201)
-      .json({ message: `Email byl zaslán na adresu ${body.email}` })
+      })
+      //todo send mail with verification link
+      return res
+        .status(201)
+        .json({ message: `Email byl zaslán na adresu ${body.email}` })
+    } catch (err) {
+      return res.status(500).json({ error: 'Internal server error' })
+    }
   }
 }
