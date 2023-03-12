@@ -1,3 +1,4 @@
+import { registerType } from '@projectType/authTypes'
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -8,13 +9,7 @@ import { useState } from 'react'
 export default function Register({
   csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [values, setValues] = useState<{
-    username: string
-    password: string
-    firstName: string
-    lastName: string
-    email: string
-  }>({
+  const [values, setValues] = useState<registerType>({
     username: '',
     password: '',
     firstName: '',
@@ -25,7 +20,7 @@ export default function Register({
   const MIN_PASSWORD_LENGTH = 8
   const MIN_USER_LENGTH = 8
 
-  const postRegister = (e: React.FormEvent) => {
+  const postRegister = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (values.username.trim().length <= MIN_USER_LENGTH)
@@ -35,16 +30,26 @@ export default function Register({
     if (!values.password.trim().match(/.+\d.+/gi))
       return alert('Heslo neobsahuje číslo')
     if (!values.password.trim().match(/[a-z]/g))
-      return alert('Heslo malé písmeno')
+      return alert('Heslo nemá malé písmeno')
     if (!values.password.trim().match(/[A-Z]/g))
-      return alert('Heslo velké písmeno')
+      return alert('Heslo nemá velké písmeno')
     if (!values.firstName.trim()) return alert('Jméno je prázdné')
     if (!values.lastName.trim()) return alert('Příjmení je prázdné')
     if (!values.email.trim()) return alert('Email je prázdný')
+
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+
+    console.log(response)
   }
 
   return (
-    <form method="post" action="/api/auth/callback/credentials">
+    <form className="flex flex-col">
       <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
       <label>
         Uživatelské jméno
@@ -56,6 +61,7 @@ export default function Register({
           required
         />
       </label>
+      <p>(alespoň 6 znaků)</p>
       <label>
         Heslo
         <input
@@ -66,6 +72,10 @@ export default function Register({
           required
         />
       </label>
+      <p>
+        (alespoň 8 znaků, nejméně jedno malé písmeno, jedno velké písmeno a
+        číslice)
+      </p>
       <label>
         Jméno
         <input
@@ -96,6 +106,7 @@ export default function Register({
           required
         />
       </label>
+      <p>Bude Vám zaslán ověřovací email</p>
       <input name="register" type="hidden" defaultValue={'true'} />
       <button type="submit" onClick={postRegister}>
         Sign in
