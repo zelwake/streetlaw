@@ -18,5 +18,5 @@ export async function checkUserInDatabase(
     where,
   })
 
-  return result === null
+  return !(result === null)
 }
