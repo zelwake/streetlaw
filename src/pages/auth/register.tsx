@@ -1,4 +1,4 @@
-import { registerType } from '@projectType/authTypes'
+import { RegisterType } from '@projectType/authTypes'
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -9,7 +9,7 @@ import { useState } from 'react'
 export default function Register({
   csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [values, setValues] = useState<registerType>({
+  const [values, setValues] = useState<RegisterType>({
     username: '',
     password: '',
     firstName: '',

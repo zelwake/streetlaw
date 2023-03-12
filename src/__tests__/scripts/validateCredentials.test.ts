@@ -1,10 +1,10 @@
 import { validateCredentials } from '@/scripts/validateCredentials'
 import { expect, test } from '@jest/globals'
-import { registerType } from '@projectType/authTypes'
+import { RegisterType } from '@projectType/authTypes'
 
 describe('Check for credentials validity', () => {
   test('On missing or empty parameters, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: '',
       firstName: '',
       lastName: '',
@@ -19,7 +19,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('Username being too short, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'test',
       firstName: 'test',
       lastName: 'test',
@@ -34,7 +34,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('Password being too short, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'test',
       firstName: 'test',
       lastName: 'test',
@@ -49,7 +49,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('Password not having number, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'test',
       firstName: 'test',
       lastName: 'test',
@@ -64,7 +64,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('Password not having lowercase character, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'test',
       firstName: 'test',
       lastName: 'test',
@@ -79,7 +79,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('Password not having uppercase character, return false and error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'test',
       firstName: 'test',
       lastName: 'test',
@@ -94,7 +94,7 @@ describe('Check for credentials validity', () => {
   })
 
   test('On valid input, return true and no error', () => {
-    const body: registerType = {
+    const body: RegisterType = {
       email: 'email@domena.cc',
       firstName: 'E',
       lastName: 'Mail',
@@ -103,7 +103,7 @@ describe('Check for credentials validity', () => {
     }
 
     expect(validateCredentials(body)).toEqual({
-      error: '',
+      error: null,
       success: true,
     })
   })

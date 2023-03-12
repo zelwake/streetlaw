@@ -1,37 +1,17 @@
-import { registerType } from '@projectType/authTypes'
+import { RegisterType } from '@projectType/authTypes'
 
-export function validateCredentials(body: registerType): {
-  error: string
+export function validateCredentials(body: RegisterType): {
+  error: string | null
   success: boolean
 } {
-  let error = ''
-  let success = false
-
   const { username, password, email, firstName, lastName } = trimValues(body)
 
-  error = checkForMissingParameters(
-    username,
-    password,
-    email,
-    firstName,
-    lastName
-  )
-  if (error.length > 0) return { error, success }
+  const error = validateUser(username, password, email, firstName, lastName)
 
-  error = checkUsernameLength(username)
-  if (error.length > 0) return { error, success }
-
-  error = validatePassword(password)
-  if (error.length > 0) return { error, success }
-
-  success = true
-  return {
-    error,
-    success,
-  }
+  return { error, success: error === null }
 }
 
-function trimValues(body: registerType): registerType {
+function trimValues(body: RegisterType): RegisterType {
   return {
     username: body.username.trim(),
     password: body.password.trim(),
@@ -41,27 +21,32 @@ function trimValues(body: registerType): registerType {
   }
 }
 
-function checkUsernameLength(username: string): string {
-  if (username.length < 6) return 'Uživatelské jméno je kratší než 6 znaků'
-  return ''
+function validatePassword(password: string): string | null {
+  if (password.length < 8) return 'Heslo je kratší než 8 znaků'
+  if (!/\d/.test(password)) return 'Heslo neobsahuje číslo'
+  if (!/[a-z]/.test(password)) return 'Heslo neobsahuje malé písmeno'
+  if (!/[A-Z]/.test(password)) return 'Heslo neobsahuje velké písmeno'
+  return null
 }
 
-function checkForMissingParameters(
+function validateUser(
   username: string,
   password: string,
   email: string,
   firstName: string,
   lastName: string
-) {
-  if (!username || !password || !email || !firstName || !lastName)
+): string | null {
+  const missingParams =
+    !username || !password || !email || !firstName || !lastName
+  if (missingParams) {
     return 'Nejsou vyplněny všechny údaje'
-  return ''
-}
+  }
 
-function validatePassword(password: string): string {
-  if (password.length < 8) return 'Heslo je kratší než 8 znaků'
-  if (!/\d/.test(password)) return 'Heslo neobsahuje číslo'
-  if (!/[a-z]/.test(password)) return 'Heslo neobsahuje malé písmeno'
-  if (!/[A-Z]/.test(password)) return 'Heslo neobsahuje velké písmeno'
-  return ''
+  const invalidUsername = username.length < 6
+  if (invalidUsername) {
+    return 'Uživatelské jméno je kratší než 6 znaků'
+  }
+
+  const invalidPassword = validatePassword(password)
+  return invalidPassword
 }

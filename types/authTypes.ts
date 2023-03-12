@@ -1,4 +1,4 @@
-export type registerType = {
+export type RegisterType = {
   username: string
   password: string
   firstName: string
