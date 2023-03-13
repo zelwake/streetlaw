@@ -1,7 +1,8 @@
 import { createTransporter } from '@/lib/nodemailer'
 import prisma from '@/lib/prisma'
-import { checkUserInDatabase } from '@/scripts/checkUserDatabase'
 import { createMailPayload } from '@/scripts/createMailPayload'
+import { checkUserInDatabase } from '@/scripts/database/checkUserDatabase'
+import { checkVerificationDatabase } from '@/scripts/database/checkVerificationDatabase'
 import { hashedPassword } from '@/scripts/hash/bcrypt'
 import { randomHash } from '@/scripts/hash/randomHash'
 import { setExpirationDate } from '@/scripts/timeDate/expirationTime'
@@ -30,16 +31,24 @@ export default async function handler(
 
   try {
     const emailExist = await checkUserInDatabase(req.body.email, 'email')
+    const emailVerification = await checkVerificationDatabase(
+      req.body.email,
+      'email'
+    )
 
-    if (emailExist)
+    if (emailExist || emailVerification)
       return res.status(400).json({ error: 'Email už je registrován' })
 
     const usernameExist = await checkUserInDatabase(
       req.body.username,
       'username'
     )
+    const usernameVerification = await checkVerificationDatabase(
+      req.body.username,
+      'username'
+    )
 
-    if (usernameExist)
+    if (usernameExist || usernameVerification)
       return res.status(400).json({ error: 'Uživatelské jméno už existuje' })
 
     const { error, success } = validateCredentials(body)

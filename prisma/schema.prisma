@@ -9,11 +9,11 @@ datasource db {
 
 model Verification {
   id         String   @id @default(uuid())
-  username   String
+  username   String   @unique
   password   String
   firstName  String
   lastName   String
-  email      String
+  email      String   @unique
   hash       String
   expiration DateTime
 }
@@ -25,7 +25,7 @@ model User {
   firstName     String  @map("first_name")
   lastName      String  @map("last_name")
   email         String  @unique
-  roleId        Int     @default(0)
+  roleId        Int     @default(1)
   photoUrl      String? @map("photo_url")
   description   String? @db.Text
   passwordReset Boolean @default(false) @map("password_reset")
