@@ -14,8 +14,8 @@ export function splitDate(date: Date) {
     [12, 'prosinec'],
   ])
 
-  const day = date.getDay()
-  const month: string = months.get(date.getMonth()) as string
+  const day = date.getDate()
+  const month: string = date.toLocaleDateString(undefined, { month: 'long' })
   const year = date.getFullYear()
 
   return { day, month, year }
