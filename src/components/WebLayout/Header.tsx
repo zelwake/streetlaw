@@ -1,9 +1,11 @@
+import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import MenuItem from './MenuItem'
 import RollMenu from './RollMenu'
 
 const Header = () => {
+  const { data: session } = useSession()
   return (
     <header className="fixed z-20 w-full flex">
       {/* Logo */}
@@ -21,14 +23,16 @@ const Header = () => {
           <RollMenu name="Materiály" />
         </div>
         {/* Right side */}
-        <div>
-          {/* on user-role 2+ */}
-          <MenuItem path="/#" name="Přidat" />
-          {/* on user-role 1+ */}
-          <MenuItem path="/#" name="Nastavení" />
-          {/* on user-role 0+ */}
-          <MenuItem path="/#" name="Odhlásit se" />
-        </div>
+        {session && (
+          <div>
+            {/* on user-role 3+ */}
+            <MenuItem path="/#" name="Přidat" />
+            {/* on user-role 2+ */}
+            <MenuItem path="/#" name="Nastavení" />
+            {/* on user-role 1+ */}
+            <MenuItem path="/" name="Odhlásit se" fn={() => signOut()} />
+          </div>
+        )}
       </nav>
       {/* English link*/}
       {/* Facebook logo */}

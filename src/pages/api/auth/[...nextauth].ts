@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma'
+import { compareHash } from '@/scripts/hash/bcrypt'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -20,21 +21,42 @@ export default NextAuth({
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
-        console.log(credentials)
-        if (true) return null
-        else
-          return {
-            id: '1',
-            name: 'Test',
+      async authorize(credentials) {
+        if (credentials) {
+          console.log(credentials)
+
+          const user = await prisma.user.findUnique({
+            where: {
+              username: credentials.username,
+            },
+          })
+
+          if (user) {
+            const checkPassword = await compareHash(
+              credentials.password,
+              user.password
+            )
+            if (checkPassword)
+              return {
+                id: user.id,
+                name: user.username,
+              }
           }
+        }
+        return null
       },
     }),
   ],
 
+  events: {
+    async session({ token }) {
+      console.log(token)
+    },
+  },
+
   pages: {
     signIn: '/auth/login',
-    error: '/auth/error',
+    error: '/auth/login',
   },
 
   // Enable debug messages in the console if you are having problems

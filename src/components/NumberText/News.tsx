@@ -4,8 +4,6 @@ import { NewsType } from '@projectType/componentTypes'
 const News = ({ date, title, abstract }: NewsType) => {
   const { day, month, year } = splitDate(new Date(date))
 
-  console.log(date)
-
   return (
     <li className="w-full max-h-60 flex justify-between pt-10">
       <div className="w-32 h-32 bg-streetlaw-500 text-white text-center flex flex-col justify-center">
