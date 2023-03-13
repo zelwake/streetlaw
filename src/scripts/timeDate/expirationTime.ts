@@ -6,6 +6,5 @@ export const setExpirationDate = (): Date => {
 
 export const isExpired = (date: Date): boolean => {
   const now = new Date()
-  const twoHours = 2 * 60 * 60 * 1000 // Two hours in milliseconds
-  return now.getTime() - date.getTime() > twoHours
+  return now > date
 }
