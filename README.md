@@ -31,7 +31,7 @@ Since this project is done under GreenFoxAcademy Húlí program, it also has to 
 
 While thinking of the web structure, we had to create our own database that would not only hold users and their roles but also completely remake the material and lessons database (MLD) as we did not have access to the previous code. MLD has find by keyword, either specific or by parent group, normal find input text area, and also by selecting the type of school. On top of that, there is pagination and items-per-list functionality.
 
-Users should also be able to create posts and edit anything that is already available on the site if their role supports this. All others should be able to create at least a simple profile about them that can then be shown on the About Us page, after approval by someone with the rights to do so.
+Users should also be able to create posts and edit anything that is already available on the site if their role supports this. All other people should be able to create at least a simple profile about them that can then be shown on the About Us page, after approval by someone with the rights to do so.
 
 ---
 
@@ -43,4 +43,21 @@ This project is created by [Michal Hladík](https://github.com/zelwake/huli-alum
 
 ### APIs
 
-> Not implemented yet
+- ##### POST: `/api/auth/register`
+
+        request
+        body = {
+            email: string,
+            username: string,
+            password: string,
+            firstName: string,
+            lastName: string
+        }
+
+        error response:
+        status(400, 405, 500, 502)
+        json({ error: string })
+
+        successful response:
+        status(201)
+        json({ message: string })
