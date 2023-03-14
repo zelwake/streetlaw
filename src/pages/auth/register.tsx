@@ -67,6 +67,14 @@ export default function Register({
           break
         case 201:
           setSuccessMessage(data.message)
+          setValues({
+            email: '',
+            firstName: '',
+            lastName: '',
+            password: '',
+            username: '',
+          })
+          break
       }
     } catch (error) {
       setErrorMessage('Něco se pokazilo, zkuste to prosím znova')

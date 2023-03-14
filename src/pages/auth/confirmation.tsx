@@ -3,21 +3,34 @@ import Header from '@/components/WebLayout/Header'
 import prisma from '@/lib/prisma'
 import { isExpired } from '@/scripts/timeDate/expirationTime'
 import { GetServerSideProps } from 'next'
+import Link from 'next/link'
 
 type Data = {
-  data: {
-    status: boolean
-    message: string
-    error: string
-  }
+  status: boolean
+  message: string
+  error: string
 }
 
-const Confirmation = ({ data }: Data) => {
-  console.log(data)
+const Confirmation = (props: Data) => {
   return (
     <>
       <Header />
-      <p>Zadařilo se?</p>
+      <div className="w-full min-h-[250px] text-center pt-36">
+        {props.status ? (
+          <>
+            <h1 className="text-5xl font-bold">{props.message}</h1>
+            <p className="text-xl font-semibold mt-2">
+              Nyní se můžete přihlásit{' '}
+              <Link href="/auth/login" className="text-streetlaw-500">
+                zde
+              </Link>
+            </p>
+          </>
+        ) : (
+          <h1 className="text-5xl font-bold text-red-500">{props.error}</h1>
+        )}
+      </div>
+
       <Footer />
     </>
   )
@@ -34,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   if (!id || !token) {
-    data.message = 'Chybějící údaje'
+    data.error = 'Chybějící údaje'
   } else {
     try {
       const result = await prisma.verification.findUnique({
@@ -44,7 +57,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       })
 
       if (!result) {
-        data.error = 'Bad request'
+        data.error = 'Špatný požadavek'
+        console.log(data)
       } else {
         const { hash, expiration } = result
 
@@ -73,9 +87,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     } catch (err) {
       console.log(err)
-      data.error = 'Internal Server Error'
+      data.error = 'Chyba na straně serveru, opakujte akci později'
     }
   }
+  console.log(data)
   return {
     props: data,
   }
