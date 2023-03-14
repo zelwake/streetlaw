@@ -68,10 +68,9 @@ export default function Register({
         case 201:
           setSuccessMessage(data.message)
       }
-
-      console.log(response)
-      //todo do something afterwards
-    } catch (error) {}
+    } catch (error) {
+      setErrorMessage('Něco se pokazilo, zkuste to prosím znova')
+    }
   }
 
   return (

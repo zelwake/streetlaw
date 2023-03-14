@@ -11,7 +11,7 @@ export default async function handler(
 
   const { id, token } = req.query
 
-  if (!id || !token) return res.status(204).json({ message: 'No Content' })
+  if (!id || !token) return res.status(204).end()
 
   try {
     const result = await prisma.verification.findUnique({
