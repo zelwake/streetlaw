@@ -30,7 +30,6 @@ const Confirmation = (props: Data) => {
           <h1 className="text-5xl font-bold text-red-500">{props.error}</h1>
         )}
       </div>
-
       <Footer />
     </>
   )
@@ -57,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       })
 
       if (!result) {
-        data.error = 'Špatný požadavek'
+        data.error = 'Neplatné údaje'
         console.log(data)
       } else {
         const { hash, expiration } = result
@@ -90,7 +89,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       data.error = 'Chyba na straně serveru, opakujte akci později'
     }
   }
-  console.log(data)
   return {
     props: data,
   }

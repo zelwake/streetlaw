@@ -59,6 +59,8 @@ export default function Register({
       })
 
       const data = await response.json()
+      console.log(data.error)
+      console.log(data.message)
       switch (response.status) {
         case 400:
         case 500:

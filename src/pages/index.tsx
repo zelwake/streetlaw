@@ -10,7 +10,7 @@ export default function Home({ news }: { news: NewsType[] }) {
   return (
     <>
       <Header />
-      <main className={`w-sl m-auto pt-20`}>
+      <main className={`w-sl m-auto`}>
         <MainBanner />
         <section className="mt-5">
           <h2 className="text-4xl text-center">
