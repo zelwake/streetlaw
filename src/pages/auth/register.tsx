@@ -21,13 +21,13 @@ export default function Register({
   const [successMessage, setSuccessMessage] = useState<string>('')
 
   const MIN_PASSWORD_LENGTH = 8
-  const MIN_USER_LENGTH = 6
 
   const postRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrorMessage('')
     setSuccessMessage('')
 
+    if (!values.email.trim()) return setErrorMessage('Email je prázdný')
     if (values.password.trim().length < MIN_PASSWORD_LENGTH)
       return setErrorMessage(
         `Heslo musí mít alespoň ${MIN_PASSWORD_LENGTH} znaků`
@@ -40,7 +40,6 @@ export default function Register({
       return setErrorMessage('Heslo nemá velké písmeno')
     if (!values.firstName.trim()) return setErrorMessage('Jméno je prázdné')
     if (!values.lastName.trim()) return setErrorMessage('Příjmení je prázdné')
-    if (!values.email.trim()) return setErrorMessage('Email je prázdný')
 
     try {
       const response = await fetch('/api/auth/register', {
@@ -52,8 +51,6 @@ export default function Register({
       })
 
       const data = await response.json()
-      console.log(data.error)
-      console.log(data.message)
       switch (response.status) {
         case 400:
         case 500:
