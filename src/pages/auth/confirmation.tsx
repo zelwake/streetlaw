@@ -66,11 +66,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           if (expiredToken) await removeTokenFromDatabase(id.toString())
           data.error = 'Token není platný nebo mu vypršela platnost'
         } else {
-          const { username, password, firstName, email, lastName } = result
+          const { password, firstName, email, lastName } = result
 
           await prisma.user.create({
             data: {
-              username,
               password,
               email,
               firstName,

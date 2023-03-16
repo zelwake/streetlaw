@@ -2,7 +2,6 @@ import { createTransporter } from '@/lib/nodemailer'
 import prisma from '@/lib/prisma'
 import { createMailPayload } from '@/scripts/createMailPayload'
 import { checkUserInDatabase } from '@/scripts/database/checkUserDatabase'
-import { checkVerificationDatabase } from '@/scripts/database/checkVerificationDatabase'
 import { hashedPassword } from '@/scripts/hash/bcrypt'
 import { randomHash } from '@/scripts/hash/randomHash'
 import { setExpirationDate } from '@/scripts/timeDate/expirationTime'
@@ -19,7 +18,6 @@ export default async function handler(
 
   if (
     !req.body.email ||
-    !req.body.username ||
     !req.body.password ||
     !req.body.firstName ||
     !req.body.lastName
@@ -30,43 +28,36 @@ export default async function handler(
   const body: RegisterType = req.body
 
   try {
-    const emailExist = await checkUserInDatabase(req.body.email, 'email')
-    const emailVerification = await checkVerificationDatabase(
-      req.body.email,
-      'email'
-    )
+    const emailExist = await checkUserInDatabase(body.email, 'email')
 
-    if (emailExist || emailVerification)
+    if (emailExist)
       return res.status(400).json({ error: 'Email už je registrován' })
-
-    const usernameExist = await checkUserInDatabase(
-      req.body.username,
-      'username'
-    )
-    const usernameVerification = await checkVerificationDatabase(
-      req.body.username,
-      'username'
-    )
-
-    if (usernameExist || usernameVerification)
-      return res.status(400).json({ error: 'Uživatelské jméno už existuje' })
 
     const { error, success } = validateCredentials(body)
 
     if (error && !success) {
       return res.status(400).json({ error })
     } else if (!error && success) {
-      const passwordHash = await hashedPassword(req.body.password)
+      const passwordHash = await hashedPassword(body.password)
       const emailVerificationHash = randomHash()
       const expirationTime = setExpirationDate()
 
-      const created = await prisma.verification.create({
-        data: {
-          username: req.body.username,
+      const created = await prisma.verification.upsert({
+        where: {
+          email: body.email,
+        },
+        update: {
+          hash: emailVerificationHash,
+          expiration: expirationTime,
           password: passwordHash,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
+          firstName: body.firstName,
+          lastName: body.lastName,
+        },
+        create: {
+          password: passwordHash,
+          firstName: body.firstName,
+          lastName: body.lastName,
+          email: body.email,
           hash: emailVerificationHash,
           expiration: expirationTime,
         },
@@ -75,7 +66,7 @@ export default async function handler(
       const transporter = createTransporter()
 
       const mailData = createMailPayload(
-        req.body.email,
+        body.email,
         created.id,
         emailVerificationHash
       )
