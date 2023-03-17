@@ -15,7 +15,21 @@ const Header = () => {
         <NavigationBar />
 
         {/* English link*/}
+        <Image
+          src="/assets/uk.svg"
+          alt="english version"
+          width={80}
+          height={80}
+          className="h-8 w-auto absolute right-12 top-1"
+        />
         {/* Facebook logo */}
+        <Image
+          src="/assets/facebook.png"
+          alt="english version"
+          width={80}
+          height={80}
+          className="h-8 w-auto absolute right-2 top-1"
+        />
       </header>
       <div className="pb-20"></div>
     </>

@@ -54,15 +54,14 @@ const NavigationBar = () => {
     <nav className="grow flex bg-white justify-between h-10 items-center shadow-sl">
       {/* Left side */}
       <div className="relative">
-        <MenuDropdownGroup name="Street Law" linkList={streetlaw} />
-
+        <MenuDropdownGroup linkList={streetlaw} name="Street Law" />
         <MenuDropdownGroup linkList={onas} name="O nás" />
         <MenuDropdownGroup linkList={conabizime} name="Co nabízíme" />
         <MenuDropdownGroup linkList={materialy} name="Materiály" />
       </div>
       {/* Right side */}
       {session && (
-        <div>
+        <div className="mr-16">
           {/* on user-role 3+ */}
           <MenuItem path="/#" name="Přidat" />
           {/* on user-role 2+ */}
