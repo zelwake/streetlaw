@@ -1,4 +1,3 @@
-import { menuStyle } from '@/styles/menu'
 import Link from 'next/link'
 
 const MenuItem = ({
@@ -13,7 +12,7 @@ const MenuItem = ({
   if (fn === undefined)
     return (
       <span>
-        <Link href={path} className={`${menuStyle}`}>
+        <Link href={path} className="nav-btn">
           {name}
         </Link>
       </span>
@@ -21,7 +20,7 @@ const MenuItem = ({
   else
     return (
       <span>
-        <Link href={path} className={`${menuStyle}`} onClick={fn}>
+        <Link href={path} className="nav-btn" onClick={fn}>
           {name}
         </Link>
       </span>

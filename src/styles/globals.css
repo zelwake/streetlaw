@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .nav-btn {
+    @apply px-3 text-2xl w-44 inline-block text-center cursor-pointer font-semibold;
+  }
+
+  .nav-btw-dropdown {
+    @apply text-lg px-3 py-4 w-44 text-center;
+  }
+
+  .nav-dropdown-menu {
+    @apply absolute z-20 mt-1 bg-white flex;
+  }
+}
