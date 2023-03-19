@@ -9,26 +9,10 @@ describe('Check for credentials validity', () => {
       firstName: '',
       lastName: '',
       password: '',
-      username: '',
     }
 
     expect(validateCredentials(body)).toEqual({
       error: 'Nejsou vyplněny všechny údaje',
-      success: false,
-    })
-  })
-
-  test('Username being too short, return false and error', () => {
-    const body: RegisterType = {
-      email: 'test',
-      firstName: 'test',
-      lastName: 'test',
-      password: 'test',
-      username: 'Lojza',
-    }
-
-    expect(validateCredentials(body)).toEqual({
-      error: 'Uživatelské jméno je kratší než 6 znaků',
       success: false,
     })
   })
@@ -39,7 +23,6 @@ describe('Check for credentials validity', () => {
       firstName: 'test',
       lastName: 'test',
       password: 'test',
-      username: 'username',
     }
 
     expect(validateCredentials(body)).toEqual({
@@ -54,7 +37,6 @@ describe('Check for credentials validity', () => {
       firstName: 'test',
       lastName: 'test',
       password: 'testtest',
-      username: 'username',
     }
 
     expect(validateCredentials(body)).toEqual({
@@ -69,7 +51,6 @@ describe('Check for credentials validity', () => {
       firstName: 'test',
       lastName: 'test',
       password: 'TEST1234',
-      username: 'username',
     }
 
     expect(validateCredentials(body)).toEqual({
@@ -84,7 +65,6 @@ describe('Check for credentials validity', () => {
       firstName: 'test',
       lastName: 'test',
       password: 'test1234',
-      username: 'username',
     }
 
     expect(validateCredentials(body)).toEqual({
@@ -99,7 +79,6 @@ describe('Check for credentials validity', () => {
       firstName: 'E',
       lastName: 'Mail',
       password: 'Heslo123',
-      username: 'username',
     }
 
     expect(validateCredentials(body)).toEqual({

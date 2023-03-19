@@ -18,29 +18,33 @@ export default NextAuth({
     CredentialsProvider({
       type: 'credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
+        email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (credentials) {
           console.log(credentials)
 
-          const user = await prisma.user.findUnique({
-            where: {
-              username: credentials.username,
-            },
-          })
+          try {
+            const user = await prisma.user.findUnique({
+              where: {
+                email: credentials.email,
+              },
+            })
 
-          if (user) {
-            const checkPassword = await compareHash(
-              credentials.password,
-              user.password
-            )
-            if (checkPassword)
-              return {
-                id: user.id,
-                name: user.username,
-              }
+            if (user) {
+              const checkPassword = await compareHash(
+                credentials.password,
+                user.password
+              )
+              if (checkPassword)
+                return {
+                  id: user.id,
+                  name: user.email,
+                }
+            }
+          } catch (error) {
+            console.log(error)
           }
         }
         return null
@@ -50,6 +54,7 @@ export default NextAuth({
 
   events: {
     async session({ token }) {
+      console.log('next auth events session function')
       console.log(token)
     },
   },

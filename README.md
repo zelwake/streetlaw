@@ -48,7 +48,6 @@ This project is created by [Michal Hladík](https://github.com/zelwake/huli-alum
         request
         body = {
             email: string,
-            username: string,
             password: string,
             firstName: string,
             lastName: string
