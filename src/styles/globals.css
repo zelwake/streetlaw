@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .nav-btn {
+    /* @apply p-1; */
+    @apply px-3 text-2xl w-48 inline-block text-center cursor-pointer font-semibold;
+  }
+
+  .nav-btw-dropdown {
+    /* @apply p-1; */
+    @apply text-lg px-3 py-4 w-48 text-center;
+  }
+
+  .nav-dropdown-menu {
+    /* @apply p-1; */
+    @apply absolute z-20 bg-white;
+  }
+}

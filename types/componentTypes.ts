@@ -3,3 +3,8 @@ export type NewsType = {
   title: string
   abstract: string
 }
+
+export type LinkListType = {
+  name: string
+  link: string
+}
