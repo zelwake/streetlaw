@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 const useImageInfo = () => {
   const [imageInfo, setImageInfo] = useState<[string, string]>([
-    'placeholder.jpg',
+    'placeholder.png',
     'placeholder',
   ])
 
