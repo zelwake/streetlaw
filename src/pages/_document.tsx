@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
+      <title>Street Law</title>
       <body className="w-full">
         <Main />
         <NextScript />
