@@ -1,13 +1,13 @@
 import Button from '@/components/Button'
 import { User } from '@prisma/client'
-import { UpdateFormType } from '@projectType/apiInterface'
+import { UpdateFormInterface } from '@projectType/apiInterface'
 import Image from 'next/image'
 import { useState } from 'react'
 
 const Profile = ({ user }: { user: User }) => {
   const [showPhotoText, setShowPhotoText] = useState<boolean>(false)
 
-  const [updateForm, setUpdateForm] = useState<UpdateFormType>({
+  const [updateForm, setUpdateForm] = useState<UpdateFormInterface>({
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,

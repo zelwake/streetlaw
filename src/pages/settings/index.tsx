@@ -3,9 +3,9 @@ import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import prisma from '@/lib/prisma'
+import { checkToken } from '@/scripts/api/checkToken'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
-import { getToken } from 'next-auth/jwt'
 import { GetServerSideProps } from 'next/types'
 import { useState } from 'react'
 
@@ -62,9 +62,9 @@ export default ProfilePage
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
-    const token = await getToken({ req, secret: process.env.JWT_SECRET })
+    const token = await checkToken(req)
 
-    if (!token) return { props: { data: 'Not logged in' } }
+    if (!token) return { props: { data: 'Nejste přihlášeni.' } }
 
     const user = await prisma.user.findUnique({
       where: {
@@ -78,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   } catch (e) {
     console.log(e)
     return {
-      props: { data: 'Internal server error' },
+      props: { data: 'Chyba serveru. Opakujte akci později.' },
     }
   }
 }
