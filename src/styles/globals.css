@@ -20,6 +20,6 @@
   }
 
   .profile-input {
-    @apply border-b-[1px] w-96 border-black pl-3 pt-2 text-2xl outline-none col-span-4;
+    @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-2xl outline-none col-span-4;
   }
 }
