@@ -1,4 +1,10 @@
-const Button = ({ value, className }: { value: string; className: string }) => {
+const Button = ({
+  value,
+  className,
+}: {
+  value: string
+  className: string | ''
+}) => {
   return (
     <input
       type="submit"
