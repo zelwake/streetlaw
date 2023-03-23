@@ -1,19 +1,68 @@
 import Button from '@/components/Button'
 import { User } from '@prisma/client'
+import { UpdateFormType } from '@projectType/apiInterface'
 import Image from 'next/image'
 import { useState } from 'react'
 
 const Profile = ({ user }: { user: User }) => {
   const [showPhotoText, setShowPhotoText] = useState<boolean>(false)
 
-  const { email, firstName, lastName, photoUrl, description } = user
+  const [updateForm, setUpdateForm] = useState<UpdateFormType>({
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    photoUrl: user.photoUrl || '/user-profile/placeholder.png',
+    description: user.description || '',
+  })
+
+  const editProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // TODO validate info
+
+    try {
+      const response = await fetch('/api/user', {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(updateForm),
+      })
+
+      // TODO what to do here?
+      switch (response.status) {
+        case 200:
+          return alert("It's all good!")
+        default:
+          return alert("Something's wrong man!")
+      }
+    } catch (error) {
+      // TODO do something useful here
+      console.log(error)
+      alert('Something went wrong. Please try again later.')
+    }
+  }
 
   return (
-    <form className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-7 relative">
+    <form
+      onSubmit={(event) => editProfile(event)}
+      className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-7 relative"
+    >
       <label htmlFor="email" className="profile-label">
         Email:
       </label>
-      <input id="email" type="email" className="profile-input" value={email} />
+      <input
+        id="email"
+        type="email"
+        className="profile-input"
+        value={updateForm.email}
+        onChange={(e) =>
+          setUpdateForm((prev) => ({
+            ...prev,
+            email: e.target.value,
+          }))
+        }
+      />
       <label htmlFor="name" className="profile-label">
         Jméno:
       </label>
@@ -21,7 +70,13 @@ const Profile = ({ user }: { user: User }) => {
         id="name"
         type="text"
         className="profile-input"
-        value={firstName}
+        value={updateForm.firstName}
+        onChange={(e) =>
+          setUpdateForm((prev) => ({
+            ...prev,
+            firstName: e.target.value,
+          }))
+        }
       />
       <label htmlFor="surname" className="profile-label">
         Příjmení:
@@ -30,7 +85,13 @@ const Profile = ({ user }: { user: User }) => {
         id="surname"
         type="text"
         className="profile-input"
-        value={lastName}
+        value={updateForm.lastName}
+        onChange={(e) =>
+          setUpdateForm((prev) => ({
+            ...prev,
+            lastName: e.target.value,
+          }))
+        }
       />
       <label htmlFor="about" className="profile-label place-self-start">
         Popis:
@@ -40,23 +101,29 @@ const Profile = ({ user }: { user: User }) => {
         cols={64}
         rows={10}
         className="col-span-4 resize-none overflow-y-scroll outline-none py-1 px-3 text-2xl bg-gray-100"
-        value={description || ''}
+        value={updateForm.description}
+        onChange={(e) =>
+          setUpdateForm((prev) => ({
+            ...prev,
+            description: e.target.value,
+          }))
+        }
       ></textarea>
       <label
         htmlFor="photo"
-        className="absolute top-0 right-16 bg-zinc-300 cursor-pointer"
+        className="absolute top-6 right-16 bg-zinc-300 cursor-pointer"
         onMouseEnter={() => setShowPhotoText(true)}
         onMouseLeave={() => setShowPhotoText(false)}
       >
         <Image
-          src="/user-profile/placeholder.png"
+          src={updateForm.photoUrl}
           alt="profilová fotografie"
-          width={200}
-          height={200}
+          width={150}
+          height={150}
           className={`rounded-full ${showPhotoText && 'blur-sm'}`}
         />
         {showPhotoText && (
-          <p className="absolute w-full text-xl text-center top-20">
+          <p className="absolute w-full text-xl text-center top-16">
             Změnit fotografii
           </p>
         )}
