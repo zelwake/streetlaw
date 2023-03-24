@@ -1,4 +1,5 @@
-import Button from '@/components/Button'
+import PasswordChange from '@/components/Forms/PasswordChange'
+import { validatePassword } from '@/scripts/validateCredentials'
 import { PasswordPUTInterface } from '@projectType/apiInterface'
 import { useState } from 'react'
 
@@ -7,12 +8,6 @@ export type PasswordsType = {
   newPassword: string
 }
 const Password = () => {
-  // TODO create form to update password
-  // should have previous password
-  // new password
-  // validate new password
-  // send to api path, where it will check old password and store new password
-
   const [passwords, setPasswords] = useState<PasswordsType>({
     oldPassword: '',
     newPassword: '',
@@ -20,6 +15,11 @@ const Password = () => {
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    // TODO validate new password
+    const valid = validatePassword(passwords.newPassword)
+
+    if (typeof valid == 'string') return alert(valid)
 
     const response = await fetch('/api/auth/password', {
       method: 'PUT',
@@ -46,33 +46,11 @@ const Password = () => {
   }
 
   return (
-    <form onSubmit={changePassword}>
-      <label htmlFor="oldPassword">Staré heslo</label>
-      <input
-        id="oldPassword"
-        type="password"
-        value={passwords.oldPassword}
-        onChange={(e) => {
-          setPasswords((prev) => ({
-            ...prev,
-            oldPassword: e.target.value,
-          }))
-        }}
-      />
-      <label htmlFor="newPassword">Nové heslo</label>
-      <input
-        id="newPassword"
-        type="password"
-        value={passwords.newPassword}
-        onChange={(e) => {
-          setPasswords((prev) => ({
-            ...prev,
-            newPassword: e.target.value,
-          }))
-        }}
-      />
-      <Button value="Změnit" />
-    </form>
+    <PasswordChange
+      changePassword={changePassword}
+      passwords={passwords}
+      setPasswords={setPasswords}
+    />
   )
 }
 

@@ -22,4 +22,12 @@
   .profile-input {
     @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-xl outline-none col-span-4;
   }
+
+  .password-label {
+    @apply text-2xl w-48 font-semibold;
+  }
+
+  .password-input {
+    @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-xl outline-none col-span-4;
+  }
 }
