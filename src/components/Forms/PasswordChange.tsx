@@ -1,6 +1,6 @@
-import Button from '@/components/Button'
+import { PasswordsType } from '@/components/SettingsPage/Password'
+import SubmitButton from '@/components/SubmitButton'
 import { Dispatch, FormEvent, SetStateAction } from 'react'
-import { PasswordsType } from '../SettingsPage/Password'
 
 const PasswordChange = ({
   changePassword,
@@ -46,7 +46,7 @@ const PasswordChange = ({
           }))
         }}
       />
-      <Button value="Změnit" className="col-start-5" />
+      <SubmitButton value="Změnit" className="col-start-5" />
     </form>
   )
 }

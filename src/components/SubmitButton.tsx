@@ -1,4 +1,4 @@
-const Button = ({
+const SubmitButton = ({
   value,
   className,
 }: {
@@ -16,4 +16,4 @@ const Button = ({
   )
 }
 
-export default Button
+export default SubmitButton

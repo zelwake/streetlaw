@@ -1,7 +1,7 @@
+import SubmitButton from '@/components/SubmitButton'
 import { UpdateFormInterface } from '@projectType/apiInterface'
 import Image from 'next/image'
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
-import Button from '../Button'
 
 const EditProfile = ({
   editProfile,
@@ -71,7 +71,7 @@ const EditProfile = ({
         id="about"
         cols={64}
         rows={10}
-        className="col-span-4 resize-none overflow-y-scroll outline-none py-1 px-3 text-2xl bg-gray-100"
+        className="col-span-4 resize-none overflow-y-scroll outline-none py-1 px-3 text-xl bg-gray-100"
         value={updateForm.description}
         onChange={(e) =>
           setUpdateForm((prev) => ({
@@ -100,7 +100,7 @@ const EditProfile = ({
         )}
       </label>
       <input id="photo" type="file" accept="image/*" className="hidden" />
-      <Button className="col-start-5" value="Uložit" />
+      <SubmitButton className="col-start-5" value="Uložit" />
     </form>
   )
 }
