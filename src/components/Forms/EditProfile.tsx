@@ -1,58 +1,18 @@
-import Button from '@/components/Button'
-import { User } from '@prisma/client'
 import { UpdateFormInterface } from '@projectType/apiInterface'
 import Image from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react'
+import Button from '../Button'
 
-const Profile = ({
-  user,
-  setUser,
+const EditProfile = ({
+  editProfile,
+  updateForm,
+  setUpdateForm,
 }: {
-  user: User
-  setUser: Dispatch<SetStateAction<User>>
+  editProfile: (event: FormEvent<HTMLFormElement>) => void
+  updateForm: UpdateFormInterface
+  setUpdateForm: Dispatch<SetStateAction<UpdateFormInterface>>
 }) => {
   const [showPhotoText, setShowPhotoText] = useState<boolean>(false)
-
-  const [updateForm, setUpdateForm] = useState<UpdateFormInterface>({
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    photoUrl: user.photoUrl || '/user-profile/placeholder.png',
-    description: user.description || '',
-  })
-
-  const editProfile = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    // TODO validate info
-
-    try {
-      const response = await fetch('/api/user', {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(updateForm),
-      })
-
-      // TODO what to do here?
-      switch (response.status) {
-        case 200:
-          setUser((prev) => ({
-            ...prev,
-            ...updateForm,
-          }))
-          // TODO create some pop-up with message what happened instead of alert
-          return alert("It's all good!")
-        default:
-          return alert("Something's wrong man!")
-      }
-    } catch (error) {
-      // TODO do something useful here
-      console.log(error)
-      alert('Something went wrong. Please try again later.')
-    }
-  }
 
   return (
     <form
@@ -145,4 +105,4 @@ const Profile = ({
   )
 }
 
-export default Profile
+export default EditProfile

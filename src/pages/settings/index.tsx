@@ -1,5 +1,5 @@
-import Profile from '@/components/Forms/Profile'
 import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
+import Profile from '@/components/SettingsPage/Profile'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import prisma from '@/lib/prisma'
@@ -7,7 +7,7 @@ import { checkToken } from '@/scripts/api/checkToken'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const ProfilePage = ({ data }: { data: User }) => {
   const [slug, setSlug] = useState<string>('profil')
@@ -32,10 +32,6 @@ const ProfilePage = ({ data }: { data: User }) => {
         return null
     }
   }
-
-  useEffect(() => {
-    console.log(userData)
-  }, [userData])
 
   return (
     <>
