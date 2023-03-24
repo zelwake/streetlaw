@@ -2,9 +2,15 @@ import Button from '@/components/Button'
 import { User } from '@prisma/client'
 import { UpdateFormInterface } from '@projectType/apiInterface'
 import Image from 'next/image'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
-const Profile = ({ user }: { user: User }) => {
+const Profile = ({
+  user,
+  setUser,
+}: {
+  user: User
+  setUser: Dispatch<SetStateAction<User>>
+}) => {
   const [showPhotoText, setShowPhotoText] = useState<boolean>(false)
 
   const [updateForm, setUpdateForm] = useState<UpdateFormInterface>({
@@ -32,6 +38,11 @@ const Profile = ({ user }: { user: User }) => {
       // TODO what to do here?
       switch (response.status) {
         case 200:
+          setUser((prev) => ({
+            ...prev,
+            ...updateForm,
+          }))
+          // TODO create some pop-up with message what happened instead of alert
           return alert("It's all good!")
         default:
           return alert("Something's wrong man!")

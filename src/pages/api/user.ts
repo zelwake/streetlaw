@@ -42,7 +42,7 @@ export default async function handler(
         return res.status(200).json({ data: 'Změněno.' })
       } catch (error) {
         console.log(error)
-        return res.status(200).json({ data: 'Chyba na straně serveru.' })
+        return res.status(500).json({ data: 'Chyba na straně serveru.' })
       }
     default:
       return res.status(405).json({ data: 'Method not allowed' })

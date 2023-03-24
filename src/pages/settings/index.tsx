@@ -7,18 +7,12 @@ import { checkToken } from '@/scripts/api/checkToken'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-const ProfilePage = ({ data }: { data: User | string }) => {
+const ProfilePage = ({ data }: { data: User }) => {
   const [slug, setSlug] = useState<string>('profil')
 
-  if (typeof data == 'string') {
-    return (
-      <p className="m-auto w-full text-9xl text-red-600 font-bold text-center">
-        {data}
-      </p>
-    )
-  }
+  const [userData, setUserData] = useState<User>(data)
 
   const submenu: SubmenuType = [
     { name: 'Profil', slug: 'profil' },
@@ -30,7 +24,7 @@ const ProfilePage = ({ data }: { data: User | string }) => {
   const rightPanel = () => {
     switch (slug) {
       case 'profil':
-        return <Profile user={data} />
+        return <Profile user={userData} setUser={setUserData} />
       case 'password':
       case 'keywords':
       case 'rights':
@@ -38,6 +32,10 @@ const ProfilePage = ({ data }: { data: User | string }) => {
         return null
     }
   }
+
+  useEffect(() => {
+    console.log(userData)
+  }, [userData])
 
   return (
     <>
@@ -64,7 +62,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const token = await checkToken(req)
 
-    if (!token) return { props: { data: 'Nejste přihlášeni.' } }
+    if (!token)
+      return {
+        redirect: {
+          destination: '/401?error=unauthorized',
+          permanent: false,
+        },
+      }
 
     const user = await prisma.user.findUnique({
       where: {
@@ -78,7 +82,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   } catch (e) {
     console.log(e)
     return {
-      props: { data: 'Chyba serveru. Opakujte akci později.' },
+      redirect: {
+        destination: '/500?error=internalservererror',
+        permanent: false,
+      },
     }
   }
 }
