@@ -2,12 +2,15 @@ import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
 import { comparePasswordHash, hashedPassword } from '@/scripts/hash/bcrypt'
 import { validatePassword } from '@/scripts/validateCredentials'
-import { PasswordInterface } from '@projectType/apiInterface'
+import {
+  PasswordInterface,
+  PasswordPUTInterface,
+} from '@projectType/apiInterface'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ data: string }>
+  res: NextApiResponse<PasswordPUTInterface>
 ) {
   const token = await checkToken(req)
 
@@ -31,10 +34,11 @@ export default async function handler(
       if (!userPassword)
         return res.status(400).json({ data: 'Wrong credentials' })
 
-      const rightPassword = comparePasswordHash(
+      const rightPassword = await comparePasswordHash(
         oldPassword,
         userPassword.password
       )
+      console.log(rightPassword)
       if (!rightPassword)
         return res.status(400).json({ data: 'Wrong credentials' })
 

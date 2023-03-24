@@ -14,3 +14,7 @@ export interface PasswordInterface {
   oldPassword: string
   newPassword: string
 }
+
+export interface PasswordPUTInterface {
+  data: string
+}
