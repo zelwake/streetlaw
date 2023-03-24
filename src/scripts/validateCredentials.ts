@@ -20,7 +20,7 @@ function trimValues(body: RegisterType): RegisterType {
   }
 }
 
-function validatePassword(password: string): string | null {
+export function validatePassword(password: string): string | null {
   if (password.length < 8) return 'Heslo je kratší než 8 znaků'
   if (!/\d/.test(password)) return 'Heslo neobsahuje číslo'
   if (!/[a-z]/.test(password)) return 'Heslo neobsahuje malé písmeno'

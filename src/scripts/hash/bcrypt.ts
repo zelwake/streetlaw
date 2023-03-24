@@ -5,7 +5,7 @@ export async function hashedPassword(password: string): Promise<string> {
   return hash
 }
 
-export function compareHash(
+export function comparePasswordHash(
   password: string,
   hashed: string
 ): Promise<boolean> {

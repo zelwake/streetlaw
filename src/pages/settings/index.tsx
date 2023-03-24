@@ -1,4 +1,5 @@
 import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
+import Password from '@/components/SettingsPage/Password'
 import Profile from '@/components/SettingsPage/Profile'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
@@ -26,6 +27,7 @@ const ProfilePage = ({ data }: { data: User }) => {
       case 'profil':
         return <Profile user={userData} setUser={setUserData} />
       case 'password':
+        return <Password />
       case 'keywords':
       case 'rights':
       default:

@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma'
-import { compareHash } from '@/scripts/hash/bcrypt'
+import { comparePasswordHash } from '@/scripts/hash/bcrypt'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -33,7 +33,7 @@ export default NextAuth({
             })
 
             if (user) {
-              const checkPassword = await compareHash(
+              const checkPassword = await comparePasswordHash(
                 credentials.password,
                 user.password
               )
