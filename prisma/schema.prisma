@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Verification {
@@ -37,6 +38,8 @@ model User {
   changedMaterial Material[] @relation("materialChangedBy")
   createdLesson   Lesson[]   @relation("lessonCreator")
   changedLesson   Lesson[]   @relation("lessonChangedBy")
+
+  @@index([roleId])
 }
 
 model User_role {
@@ -67,7 +70,9 @@ model Post {
   changedBy     User          @relation("postChangedBy", fields: [changedById], references: [id])
   Post_category Post_category @relation(fields: [categoryId], references: [id])
 
-  @@index([creatorId, changedById])
+  @@index([creatorId])
+  @@index([changedById])
+  @@index([categoryId])
 }
 
 model Page {
@@ -84,7 +89,8 @@ model Page {
   creator   User @relation("pageCreator", fields: [creatorId], references: [id])
   changedBy User @relation("pageChangedBy", fields: [changedById], references: [id])
 
-  @@index([creatorId, changedById])
+  @@index([creatorId])
+  @@index([changedById])
 }
 
 model Material {
@@ -109,7 +115,8 @@ model Material {
   creator   User @relation("materialCreator", fields: [creatorId], references: [id])
   changedBy User @relation("materialChangedBy", fields: [changedById], references: [id])
 
-  @@index([creatorId, changedById])
+  @@index([creatorId])
+  @@index([changedById])
 }
 
 model Material_keyword {
@@ -135,6 +142,8 @@ model Keyword_to_Material {
   Keyword  Material_keyword @relation(fields: [keywordId], references: [id])
 
   @@id([materialId, keywordId])
+  @@index([materialId])
+  @@index([keywordId])
 }
 
 model Keyword_to_material_category {
@@ -145,6 +154,8 @@ model Keyword_to_material_category {
   Keyword_category Keyword_material_category @relation(fields: [categoryId], references: [id])
 
   @@id([keywordId, categoryId])
+  @@index([categoryId])
+  @@index([keywordId])
 }
 
 model Lesson {
@@ -166,7 +177,8 @@ model Lesson {
   creator   User @relation("lessonCreator", fields: [creatorId], references: [id])
   changedBy User @relation("lessonChangedBy", fields: [changedById], references: [id])
 
-  @@index([creatorId, changedById])
+  @@index([creatorId])
+  @@index([changedById])
 }
 
 model Lesson_keyword {
@@ -192,6 +204,8 @@ model Keyword_to_Lesson {
   Keyword Lesson_keyword @relation(fields: [keywordId], references: [id])
 
   @@id([lessonId, keywordId])
+  @@index([lessonId])
+  @@index([keywordId])
 }
 
 model Keyword_to_lesson_category {
@@ -202,4 +216,6 @@ model Keyword_to_lesson_category {
   Keyword_category Keyword_lesson_category @relation(fields: [categoryId], references: [id])
 
   @@id([keywordId, categoryId])
+  @@index([categoryId])
+  @@index([keywordId])
 }

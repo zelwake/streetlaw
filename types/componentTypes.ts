@@ -8,3 +8,8 @@ export type LinkListType = {
   name: string
   link: string
 }
+
+export type SubmenuType = {
+  name: string
+  slug: string
+}[]

@@ -4,17 +4,30 @@
 
 @layer components {
   .nav-btn {
-    /* @apply p-1; */
     @apply px-3 text-2xl w-48 inline-block text-center cursor-pointer font-semibold;
   }
 
-  .nav-btw-dropdown {
-    /* @apply p-1; */
+  .nav-btn-dropdown {
     @apply text-lg px-3 py-4 w-48 text-center;
   }
 
   .nav-dropdown-menu {
-    /* @apply p-1; */
     @apply absolute z-20 bg-white;
+  }
+
+  .profile-label {
+    @apply text-2xl w-48 font-semibold;
+  }
+
+  .profile-input {
+    @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-xl outline-none col-span-4;
+  }
+
+  .password-label {
+    @apply text-2xl w-48 font-semibold;
+  }
+
+  .password-input {
+    @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-xl outline-none col-span-4;
   }
 }

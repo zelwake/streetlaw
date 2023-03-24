@@ -65,7 +65,7 @@ const NavigationBar = () => {
           {/* on user-role 3+ */}
           <MenuItem path="/#" name="Přidat" />
           {/* on user-role 2+ */}
-          <MenuItem path="/#" name="Nastavení" />
+          <MenuItem path="/settings" name="Nastavení" />
           {/* on user-role 1+ */}
           <MenuItem path="/" name="Odhlásit se" fn={() => signOut()} />
         </div>

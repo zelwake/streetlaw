@@ -1,4 +1,4 @@
-import { compareHash, hashedPassword } from '@/scripts/hash/bcrypt'
+import { comparePasswordHash, hashedPassword } from '@/scripts/hash/bcrypt'
 import { expect, it } from '@jest/globals'
 
 describe('Testing hashing of passwords', () => {
@@ -6,7 +6,7 @@ describe('Testing hashing of passwords', () => {
     const password = 'password'
     const hashed = await hashedPassword(password)
 
-    expect(await compareHash(password, hashed)).toBe(true)
+    expect(await comparePasswordHash(password, hashed)).toBe(true)
   })
 
   it('should return false for different password', async () => {
@@ -14,6 +14,6 @@ describe('Testing hashing of passwords', () => {
     const hashed = await hashedPassword(password)
     password = 'password2'
 
-    expect(await compareHash(password, hashed)).toBe(false)
+    expect(await comparePasswordHash(password, hashed)).toBe(false)
   })
 })
