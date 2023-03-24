@@ -9,7 +9,7 @@ const Button = ({
     <input
       type="submit"
       value={value}
-      className={`w-44 h-14 text-4xl font-semibold text-center bg-streetlaw-500 text-white ${className}`}
+      className={`w-44 h-14 text-4xl font-semibold text-center bg-streetlaw-500 cursor-pointer text-white ${className}`}
     />
   )
 }
