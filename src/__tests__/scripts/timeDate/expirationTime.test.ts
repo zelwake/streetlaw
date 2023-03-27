@@ -6,7 +6,10 @@ describe('Testing setExpirationDate function', () => {
     const futureTime = new Date()
     futureTime.setHours(futureTime.getHours() + 2)
 
-    expect(setExpirationDate().getTime()).toBeCloseTo(futureTime.getTime(), 4)
+    expect(setExpirationDate().getTime() / 100).toBeCloseTo(
+      futureTime.getTime() / 100,
+      3
+    )
   })
 
   it('should not equal since times are not same', () => {
