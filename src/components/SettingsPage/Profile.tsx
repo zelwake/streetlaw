@@ -11,7 +11,6 @@ const Profile = ({
   setUser: Dispatch<SetStateAction<User>>
 }) => {
   const [updateForm, setUpdateForm] = useState<UpdateFormInterface>({
-    email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
     photoUrl: user.photoUrl || '/user-profile/placeholder.png',
@@ -21,7 +20,8 @@ const Profile = ({
   const editProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // TODO validate info
+    if (updateForm.firstName.trim() || updateForm.lastName.trim())
+      return alert('Chybí jméno nebo příjmení.')
 
     try {
       const response = await fetch('/api/user', {
@@ -32,7 +32,6 @@ const Profile = ({
         body: JSON.stringify(updateForm),
       })
 
-      // TODO what to do here?
       switch (response.status) {
         case 200:
           setUser((prev) => ({

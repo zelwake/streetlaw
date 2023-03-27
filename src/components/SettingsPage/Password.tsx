@@ -16,7 +16,6 @@ const Password = () => {
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // TODO validate new password
     const valid = validatePassword(passwords.newPassword)
 
     if (typeof valid == 'string') return alert(valid)

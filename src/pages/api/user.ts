@@ -1,10 +1,10 @@
 import prisma from '@/lib/prisma'
+import { checkToken } from '@/scripts/api/checkToken'
 import {
   UpdateFormInterface,
   UserPUTInterface,
 } from '@projectType/apiInterface'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { checkToken } from '../../scripts/api/checkToken'
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,14 +17,14 @@ export default async function handler(
   switch (req.method) {
     case 'PUT':
       const {
-        email,
         firstName,
         lastName,
         photoUrl,
         description,
       }: UpdateFormInterface = req.body
 
-      // TODO validate data
+      if (firstName.trim() || lastName.trim())
+        return res.status(400).json({ data: 'Chybí jméno nebo příjmení.' })
 
       try {
         await prisma.user.update({
@@ -32,7 +32,6 @@ export default async function handler(
             id: token.sub,
           },
           data: {
-            email,
             firstName,
             lastName,
             photoUrl,
