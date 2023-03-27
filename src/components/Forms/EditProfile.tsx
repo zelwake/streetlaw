@@ -17,23 +17,8 @@ const EditProfile = ({
   return (
     <form
       onSubmit={(event) => editProfile(event)}
-      className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-7 relative"
+      className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-y-12 relative"
     >
-      <label htmlFor="email" className="profile-label">
-        Email:
-      </label>
-      <input
-        id="email"
-        type="email"
-        className="profile-input"
-        value={updateForm.email}
-        onChange={(e) =>
-          setUpdateForm((prev) => ({
-            ...prev,
-            email: e.target.value,
-          }))
-        }
-      />
       <label htmlFor="name" className="profile-label">
         Jméno:
       </label>
@@ -82,7 +67,7 @@ const EditProfile = ({
       ></textarea>
       <label
         htmlFor="photo"
-        className="absolute top-6 right-16 bg-zinc-300 cursor-pointer"
+        className="absolute top-1 right-16 bg-zinc-300 cursor-pointer"
         onMouseEnter={() => setShowPhotoText(true)}
         onMouseLeave={() => setShowPhotoText(false)}
       >
@@ -100,7 +85,7 @@ const EditProfile = ({
         )}
       </label>
       <input id="photo" type="file" accept="image/*" className="hidden" />
-      <SubmitButton className="col-start-5" value="Uložit" />
+      <SubmitButton className="relative -right-5 col-start-5" value="Uložit" />
     </form>
   )
 }
