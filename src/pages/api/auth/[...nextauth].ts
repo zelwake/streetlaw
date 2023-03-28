@@ -23,8 +23,6 @@ export default NextAuth({
       },
       async authorize(credentials) {
         if (credentials) {
-          console.log(credentials)
-
           try {
             const user = await prisma.user.findUnique({
               where: {
@@ -41,6 +39,7 @@ export default NextAuth({
                 return {
                   id: user.id,
                   name: user.email,
+                  roleId: user.roleId,
                 }
             }
           } catch (error) {
@@ -51,6 +50,21 @@ export default NextAuth({
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user && user.roleId) {
+        token.roleId = user.roleId
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.roleId = token.roleId
+      }
+      return session
+    },
+  },
 
   events: {
     async session({ token }) {
