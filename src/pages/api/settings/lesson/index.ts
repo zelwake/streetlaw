@@ -94,7 +94,7 @@ export default async function handler(
         return res.status(500).json({ data: 'Internal server error' })
       }
     }
+    default:
+      res.status(405).json({ data: 'Method not allowed' })
   }
-
-  res.status(405).json({ data: 'Method not allowed' })
 }

@@ -1,4 +1,5 @@
 import { Keyword_lesson_category, Lesson_keyword } from '@prisma/client'
+import { settingsLessonDELETEInterface } from '@projectType/apiInterface'
 import { useEffect, useState } from 'react'
 
 const Keywords = () => {
@@ -20,9 +21,23 @@ const Keywords = () => {
     setKeywords(body.data.keywords)
   }
 
+  const removeRelation = async (id: number) => {
+    const data: settingsLessonDELETEInterface = {
+      category: selected,
+      keyword: id,
+    }
+
+    const send = await fetch('url', {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+  }
   if (categories.length) {
     return (
-      <div className="flex gap-x-5">
+      <div className="flex gap-x-5 p-5">
         <div>
           {categories.map((v) => (
             <p key={v.id} onClick={() => fetchKeywords(v.id)}>
@@ -32,9 +47,19 @@ const Keywords = () => {
         </div>
         <div>
           {keywords.map((v) => (
-            <p key={v.Keyword.id}>{v.Keyword.word}</p>
+            <div key={v.Keyword.id} className="flex w-80 justify-between">
+              <p>{v.Keyword.word}</p>
+              <button onClick={() => removeRelation(v.Keyword.id)}>
+                Odebrat
+              </button>
+            </div>
           ))}
         </div>
+        <form>
+          <select name="keyword" id="">
+            Ahoj
+          </select>
+        </form>
       </div>
     )
   }
