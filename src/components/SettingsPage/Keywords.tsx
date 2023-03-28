@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react'
 
 const Keywords = () => {
   const categories = useCategoryList()
+  const keywordsList = useKeywordsList()
 
   const [selected, setSelected] = useState<number>(1)
-  const [keywords, setKeywords] = useState<{ Keyword: Lesson_keyword }[]>([])
+  const [keywords, setKeywords] = useState<Lesson_keyword[]>([])
+  const [addValue, setAddValue] = useState<number>(1)
 
-  const fetchKeywords = async (id: number) => {
+  const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
     const response = await fetch(`/api/settings/lesson?category=${id}`)
     const body: {
@@ -18,7 +20,12 @@ const Keywords = () => {
         }[]
       }
     } = await response.json()
-    setKeywords(body.data.keywords)
+    setKeywords(
+      body.data.keywords.map((v) => ({
+        id: v.Keyword.id,
+        word: v.Keyword.word,
+      }))
+    )
   }
 
   const removeRelation = async (id: number) => {
@@ -35,30 +42,42 @@ const Keywords = () => {
       body: JSON.stringify(data),
     })
   }
+
+  const addRelation = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log(addValue)
+  }
+
   if (categories.length) {
     return (
       <div className="flex gap-x-5 p-5">
         <div>
           {categories.map((v) => (
-            <p key={v.id} onClick={() => fetchKeywords(v.id)}>
+            <p key={v.id} onClick={() => fetchKeywordsGroup(v.id)}>
               {v.word}
             </p>
           ))}
         </div>
         <div>
           {keywords.map((v) => (
-            <div key={v.Keyword.id} className="flex w-80 justify-between">
-              <p>{v.Keyword.word}</p>
-              <button onClick={() => removeRelation(v.Keyword.id)}>
-                Odebrat
-              </button>
+            <div key={v.id} className="flex w-80 justify-between">
+              <p>{v.word}</p>
+              <button onClick={() => removeRelation(v.id)}>Odebrat</button>
             </div>
           ))}
         </div>
-        <form>
-          <select name="keyword" id="">
-            Ahoj
+        <form onSubmit={addRelation}>
+          <select
+            value={addValue}
+            onChange={(e) => setAddValue(parseInt(e.target.value))}
+          >
+            {keywordsList.map((v) => (
+              <option value={v.id} key={v.id}>
+                {v.word}
+              </option>
+            ))}
           </select>
+          <input type="submit" name="addRelation" value="Přidat" />
         </form>
       </div>
     )
@@ -83,4 +102,21 @@ function useCategoryList() {
   }, [])
 
   return categories
+}
+
+function useKeywordsList() {
+  const [keywordsList, setKeywordList] = useState<Lesson_keyword[]>([])
+
+  const fetchKeywordsList = async () => {
+    const response = await fetch('/api/settings/lesson/keywords')
+    const body: { data: Lesson_keyword[] } = await response.json()
+    console.log(body.data)
+    setKeywordList(body.data)
+  }
+
+  useEffect(() => {
+    fetchKeywordsList()
+  }, [])
+
+  return keywordsList
 }
