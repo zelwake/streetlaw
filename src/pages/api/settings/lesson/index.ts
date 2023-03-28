@@ -21,9 +21,12 @@ export default async function handler(
     case 'GET': {
       const { category } = req.query
 
-      if (!category) return res.status(400).json({ data: 'Bad request' })
-
       try {
+        if (!category) {
+          const categories = await prisma.keyword_lesson_category.findMany()
+          return res.status(200).json({ data: categories })
+        }
+
         const categoryData = await prisma.keyword_lesson_category.findFirst({
           where: {
             id: parseInt(category as string),
