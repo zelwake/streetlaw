@@ -53,6 +53,36 @@ export default async function handler(
         return res.status(500).json({ data: 'Internal server error' })
       }
     }
+    case 'DELETE': {
+      const { keyword, category }: { keyword: number; category: number } =
+        req.body
+
+      const relation = {
+        categoryId: category,
+        keywordId: keyword,
+      }
+
+      try {
+        const exist = await prisma.keyword_to_lesson_category.findUnique({
+          where: {
+            keywordId_categoryId: relation,
+          },
+        })
+
+        if (!exist) return res.status(400).json({ data: 'Bad request' })
+
+        await prisma.keyword_to_lesson_category.delete({
+          where: {
+            keywordId_categoryId: relation,
+          },
+        })
+
+        return res.status(201).json({ data: 'Successfully removed' })
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({ data: 'Internal server error' })
+      }
+    }
   }
 
   res.status(405).json({ data: 'Method not allowed' })
