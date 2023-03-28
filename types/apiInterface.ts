@@ -1,3 +1,5 @@
+import { Keyword_lesson_category, Lesson_keyword } from '@prisma/client'
+
 export interface UpdateFormInterface {
   firstName: string
   lastName: string
@@ -16,4 +18,24 @@ export interface PasswordInterface {
 
 export interface PasswordPUTInterface {
   data: string
+}
+
+export interface settingsLessonResponse {
+  data:
+    | (Keyword_lesson_category & {
+        keywords: {
+          Keyword: Lesson_keyword
+        }[]
+      })
+    | null
+}
+
+export interface settingsLessonDELETEInterface {
+  keyword: number
+  category: number
+}
+
+export interface settingsLessonPOSTInterface {
+  keyword: number
+  category: number
 }

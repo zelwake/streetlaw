@@ -1,5 +1,9 @@
 import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
+import {
+  settingsLessonDELETEInterface,
+  settingsLessonPOSTInterface,
+} from '@projectType/apiInterface'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
@@ -42,8 +46,7 @@ export default async function handler(
       }
     }
     case 'POST': {
-      const { keyword, category }: { keyword: number; category: number } =
-        req.body
+      const { keyword, category }: settingsLessonPOSTInterface = req.body
 
       try {
         const addRelation = await prisma.keyword_to_lesson_category.create({
@@ -60,8 +63,7 @@ export default async function handler(
       }
     }
     case 'DELETE': {
-      const { keyword, category }: { keyword: number; category: number } =
-        req.body
+      const { keyword, category }: settingsLessonDELETEInterface = req.body
 
       const relation = {
         categoryId: category,
