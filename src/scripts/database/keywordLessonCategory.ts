@@ -71,3 +71,7 @@ export async function getCategoryKeywords(category: number): Promise<
 export async function getCategoryList(): Promise<Keyword_lesson_category[]> {
   return await prisma.keyword_lesson_category.findMany()
 }
+
+export async function getKeywordsList(): Promise<Lesson_keyword[]> {
+  return await prisma.lesson_keyword.findMany()
+}

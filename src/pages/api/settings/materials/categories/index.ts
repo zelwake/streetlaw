@@ -1,5 +1,5 @@
 import { checkToken } from '@/scripts/api/checkToken'
-import { getCategoryList } from '@/scripts/database/keywordLessonCategory'
+import { getCategoryList } from '@/scripts/database/keywordMaterialsCategory'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
