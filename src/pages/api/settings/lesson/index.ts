@@ -1,7 +1,9 @@
-import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
 import {
   createRelation,
+  deleteRelation,
+  getCategoryKeywords,
+  getCategoryList,
   relationExists,
 } from '@/scripts/database/keywordLessonCategory'
 import {
@@ -27,23 +29,11 @@ export default async function handler(
 
       try {
         if (!category) {
-          const categories = await prisma.keyword_lesson_category.findMany()
+          const categories = await getCategoryList()
           return res.status(200).json({ data: categories })
         }
 
-        const categoryData = await prisma.keyword_lesson_category.findUnique({
-          where: {
-            id: parseInt(category as string),
-          },
-          include: {
-            keywords: {
-              select: {
-                Keyword: true,
-              },
-            },
-          },
-        })
-
+        const categoryData = await getCategoryKeywords(category)
         if (!categoryData) return res.status(404).json({ data: 'Not found' })
 
         return res.status(200).json({ data: categoryData })
@@ -62,11 +52,9 @@ export default async function handler(
 
       try {
         const exist = await relationExists(relation)
-
         if (!exist) return res.status(400).json({ data: 'Bad request' })
 
         const addRelation = await createRelation(relation)
-
         return res.status(201).json({ data: addRelation.Keyword })
       } catch (error) {
         console.log(error)
@@ -83,15 +71,9 @@ export default async function handler(
 
       try {
         const exist = await relationExists(relation)
-
         if (!exist) return res.status(400).json({ data: 'Bad request' })
 
-        await prisma.keyword_to_lesson_category.delete({
-          where: {
-            keywordId_categoryId: relation,
-          },
-        })
-
+        await deleteRelation(relation)
         return res.status(200).json({ data: 'Successfully removed' })
       } catch (error) {
         console.log(error)
@@ -99,6 +81,6 @@ export default async function handler(
       }
     }
     default:
-      res.status(405).json({ data: 'Method not allowed' })
+      return res.status(405).json({ data: 'Method not allowed' })
   }
 }
