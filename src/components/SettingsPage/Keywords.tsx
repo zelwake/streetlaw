@@ -31,10 +31,12 @@ const Keywords = () => {
             }
           } = await response.json()
           setKeywords(
-            body.data.keywords.map((v) => ({
-              id: v.Keyword.id,
-              word: v.Keyword.word,
-            }))
+            body.data.keywords
+              .map((v) => ({
+                id: v.Keyword.id,
+                word: v.Keyword.word,
+              }))
+              .sort((a, b) => a.word.localeCompare(b.word))
           )
           break
         }
@@ -118,7 +120,9 @@ const Keywords = () => {
             }
           }
           setKeywords((prev) =>
-            [...prev, (json as jsonData).data].sort((a, b) => a.id - b.id)
+            [...prev, (json as jsonData).data].sort((a, b) =>
+              a.word.localeCompare(b.word)
+            )
           )
 
           break
@@ -140,14 +144,26 @@ const Keywords = () => {
       <div className="p-5">
         <section className="grid grid-cols-2 mb-5">
           <h1
-            className="text-4xl font-bold"
-            onClick={() => setGroup('lessons')}
+            className={`text-4xl cursor-pointer w-fit ${
+              group == 'lessons' && 'font-bold'
+            }`}
+            onClick={() => {
+              setGroup('lessons')
+              setSelected(0)
+              setKeywords([])
+            }}
           >
             Lekce
           </h1>
           <h1
-            className="text-4xl font-bold"
-            onClick={() => setGroup('materials')}
+            className={`text-4xl cursor-pointer w-fit ${
+              group == 'materials' && 'font-bold'
+            }`}
+            onClick={() => {
+              setGroup('materials')
+              setSelected(0)
+              setKeywords([])
+            }}
           >
             Materiály
           </h1>
