@@ -1,6 +1,10 @@
 import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
 import {
+  createRelation,
+  relationExists,
+} from '@/scripts/database/keywordLessonCategory'
+import {
   settingsLessonDELETEInterface,
   settingsLessonPOSTInterface,
 } from '@projectType/apiInterface'
@@ -27,7 +31,7 @@ export default async function handler(
           return res.status(200).json({ data: categories })
         }
 
-        const categoryData = await prisma.keyword_lesson_category.findFirst({
+        const categoryData = await prisma.keyword_lesson_category.findUnique({
           where: {
             id: parseInt(category as string),
           },
@@ -57,25 +61,11 @@ export default async function handler(
       }
 
       try {
-        const exist = await prisma.keyword_to_lesson_category.findUnique({
-          where: {
-            keywordId_categoryId: relation,
-          },
-        })
+        const exist = await relationExists(relation)
 
         if (!exist) return res.status(400).json({ data: 'Bad request' })
 
-        const addRelation = await prisma.keyword_to_lesson_category.create({
-          data: relation,
-          select: {
-            Keyword: {
-              select: {
-                id: true,
-                word: true,
-              },
-            },
-          },
-        })
+        const addRelation = await createRelation(relation)
 
         return res.status(201).json({ data: addRelation.Keyword })
       } catch (error) {
@@ -92,11 +82,7 @@ export default async function handler(
       }
 
       try {
-        const exist = await prisma.keyword_to_lesson_category.findUnique({
-          where: {
-            keywordId_categoryId: relation,
-          },
-        })
+        const exist = await relationExists(relation)
 
         if (!exist) return res.status(400).json({ data: 'Bad request' })
 

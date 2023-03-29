@@ -19,19 +19,31 @@ const Keywords = () => {
     setSelected(id)
     try {
       const response = await fetch(`/api/settings/lesson?category=${id}`)
-      const body: {
-        data: {
-          keywords: {
-            Keyword: Lesson_keyword
-          }[]
+      switch (response.status) {
+        case 200: {
+          const body: {
+            data: {
+              keywords: {
+                Keyword: Lesson_keyword
+              }[]
+            }
+          } = await response.json()
+          setKeywords(
+            body.data.keywords.map((v) => ({
+              id: v.Keyword.id,
+              word: v.Keyword.word,
+            }))
+          )
+          break
         }
-      } = await response.json()
-      setKeywords(
-        body.data.keywords.map((v) => ({
-          id: v.Keyword.id,
-          word: v.Keyword.word,
-        }))
-      )
+        case 404: {
+          return alert('Neexistuje')
+        }
+        case 500:
+        default: {
+          return alert('Něco se pokazilo. Opakujte akci později.')
+        }
+      }
     } catch (error) {
       return alert('Něco se pokazilo. Opakujte akci později.')
     }
