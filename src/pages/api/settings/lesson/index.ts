@@ -57,9 +57,17 @@ export default async function handler(
             categoryId: category,
             keywordId: keyword,
           },
+          select: {
+            Keyword: {
+              select: {
+                id: true,
+                word: true,
+              },
+            },
+          },
         })
 
-        return res.status(201).json({ data: addRelation })
+        return res.status(201).json({ data: addRelation.Keyword })
       } catch (error) {
         console.log(error)
         return res.status(500).json({ data: 'Internal server error' })

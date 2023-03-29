@@ -1,5 +1,8 @@
 import { Keyword_lesson_category, Lesson_keyword } from '@prisma/client'
-import { settingsLessonDELETEInterface } from '@projectType/apiInterface'
+import {
+  settingsLessonDELETEInterface,
+  settingsLessonPOSTInterface,
+} from '@projectType/apiInterface'
 import { useEffect, useState } from 'react'
 
 const Keywords = () => {
@@ -45,7 +48,26 @@ const Keywords = () => {
 
   const addRelation = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(addValue)
+
+    const data: settingsLessonPOSTInterface = {
+      category: selected,
+      keyword: addValue,
+    }
+    const post = await fetch('/api/settings/lesson', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    const json: {
+      data: {
+        id: number
+        word: string
+      }
+    } = await post.json()
+    setKeywords((prev) => [...prev, json.data].sort((a, b) => a.id - b.id))
   }
 
   if (categories.length) {
