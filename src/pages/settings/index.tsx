@@ -1,4 +1,5 @@
 import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
+import Keywords from '@/components/SettingsPage/Keywords'
 import Password from '@/components/SettingsPage/Password'
 import Profile from '@/components/SettingsPage/Profile'
 import Footer from '@/components/WebLayout/Footer'
@@ -29,6 +30,7 @@ const ProfilePage = ({ data }: { data: User }) => {
       case 'password':
         return <Password />
       case 'keywords':
+        return <Keywords />
       case 'rights':
       default:
         return null

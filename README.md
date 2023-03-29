@@ -54,9 +54,153 @@ This project is created by [Michal Hladík](https://github.com/zelwake/huli-alum
         }
 
         error response:
-        status(400, 405, 500, 502)
+        status(400, 500, 502)
         json({ error: string })
 
         successful response:
         status(201)
         json({ message: string })
+
+- ##### GET: `/api/settings/lessons/keywords/`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: keyword-list })
+
+- ##### GET: `/api/settings/lessons/categories/`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: category-list })
+
+- ##### GET: `/api/settings/lessons/categories/:id`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: category-list })
+
+- ##### POST: `/api/settings/lessons/categories/:id`
+
+        request:
+        body = {
+          keyword: string
+        }
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(201)
+        json({ data: {
+          id: number,
+          word: string
+        }})
+
+- ##### DELETE: `/api/settings/lessons/categories/:id`
+
+        request:
+        body = {
+          keyword: string
+        }
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: string })
+
+- ##### GET: `/api/settings/materials/keywords/`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: keyword-list })
+
+- ##### GET: `/api/settings/materials/categories/`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: category-list })
+
+- ##### GET: `/api/settings/materials/categories/:id`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: category-list })
+
+- ##### POST: `/api/settings/materials/categories/:id`
+
+        request:
+        body = {
+          keyword: string
+        }
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(201)
+        json({ data: {
+          id: number,
+          word: string
+        }})
+
+- ##### DELETE: `/api/settings/materials/categories/:id`
+
+        request:
+        body = {
+          keyword: string
+        }
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({ data: string })
