@@ -3,7 +3,6 @@ import {
   createRelation,
   deleteRelation,
   getCategoryKeywords,
-  getCategoryList,
   relationExists,
 } from '@/scripts/database/keywordLessonCategory'
 import {
@@ -22,18 +21,13 @@ export default async function handler(
     return res.status(401).json({ data: 'Unauthorized' })
 
   const { method } = req
+  const { id } = req.query
+  const categoryId: number = id ? Number(id.toString()) : 0
 
   switch (method) {
     case 'GET': {
-      const { category } = req.query
-
       try {
-        if (!category) {
-          const categories = await getCategoryList()
-          return res.status(200).json({ data: categories })
-        }
-
-        const categoryData = await getCategoryKeywords(Number(category))
+        const categoryData = await getCategoryKeywords(categoryId)
         if (!categoryData) return res.status(404).json({ data: 'Not found' })
 
         return res.status(200).json({ data: categoryData })
@@ -43,16 +37,16 @@ export default async function handler(
       }
     }
     case 'POST': {
-      const { keyword, category }: settingsLessonPOSTInterface = req.body
+      const { keyword }: settingsLessonPOSTInterface = req.body
 
       const relation = {
-        categoryId: category,
+        categoryId,
         keywordId: keyword,
       }
 
       try {
         const exist = await relationExists(relation)
-        if (!exist) return res.status(400).json({ data: 'Bad request' })
+        if (exist) return res.status(400).json({ data: 'Bad request' })
 
         const addRelation = await createRelation(relation)
         return res.status(201).json({ data: addRelation.Keyword })
@@ -62,10 +56,10 @@ export default async function handler(
       }
     }
     case 'DELETE': {
-      const { keyword, category }: settingsLessonDELETEInterface = req.body
+      const { keyword }: settingsLessonDELETEInterface = req.body
 
       const relation = {
-        categoryId: category,
+        categoryId,
         keywordId: keyword,
       }
 

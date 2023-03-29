@@ -20,10 +20,7 @@ export async function createRelation(relation: {
   categoryId: number
   keywordId: number
 }): Promise<{
-  Keyword: {
-    id: number
-    word: string
-  }
+  Keyword: Lesson_keyword
 }> {
   return await prisma.keyword_to_lesson_category.create({
     data: relation,
@@ -49,7 +46,7 @@ export async function deleteRelation(relation: {
   })
 }
 
-export async function getCategoryKeywords(category: string | string[]): Promise<
+export async function getCategoryKeywords(category: number): Promise<
   | (Keyword_lesson_category & {
       keywords: {
         Keyword: Lesson_keyword
@@ -59,7 +56,7 @@ export async function getCategoryKeywords(category: string | string[]): Promise<
 > {
   return await prisma.keyword_lesson_category.findUnique({
     where: {
-      id: parseInt(category as string),
+      id: category,
     },
     include: {
       keywords: {
