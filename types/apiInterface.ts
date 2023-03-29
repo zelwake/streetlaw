@@ -32,10 +32,8 @@ export interface settingsLessonResponse {
 
 export interface settingsLessonDELETEInterface {
   keyword: number
-  category: number
 }
 
 export interface settingsLessonPOSTInterface {
   keyword: number
-  category: number
 }

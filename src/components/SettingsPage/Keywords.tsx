@@ -51,7 +51,6 @@ const Keywords = () => {
 
   const removeRelation = async (id: number) => {
     const data: settingsLessonDELETEInterface = {
-      category: selected,
       keyword: id,
     }
 
@@ -82,7 +81,6 @@ const Keywords = () => {
     e.preventDefault()
 
     const data: settingsLessonPOSTInterface = {
-      category: selected,
       keyword: addValue,
     }
     try {
