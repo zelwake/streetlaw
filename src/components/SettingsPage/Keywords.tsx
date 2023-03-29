@@ -37,13 +37,25 @@ const Keywords = () => {
       keyword: id,
     }
 
-    const send = await fetch('url', {
+    const send = await fetch('/api/settings/lesson', {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(data),
     })
+
+    switch (send.status) {
+      case 200:
+        return setKeywords((prev) => prev.filter((v) => v.id != id))
+      case 400:
+        return alert('Chybně zadaný požadavek.')
+      case 500:
+        return alert('Chyba na straně serveru. Opakujte akci později.')
+
+      default:
+        break
+    }
   }
 
   const addRelation = async (e: React.FormEvent) => {
