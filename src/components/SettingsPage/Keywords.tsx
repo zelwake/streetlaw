@@ -6,6 +6,7 @@ import {
   settingsLessonPOSTInterface,
 } from '@projectType/apiInterface'
 import { useState } from 'react'
+import LessonForm from '../Forms/LessonForm'
 
 const Keywords = () => {
   const categories = useCategoryList()
@@ -13,7 +14,7 @@ const Keywords = () => {
 
   const [selected, setSelected] = useState<number>(0)
   const [keywords, setKeywords] = useState<Lesson_keyword[]>([])
-  const [addValue, setAddValue] = useState<number>(1)
+  const [addValue, setAddValue] = useState<number>(0)
 
   const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
@@ -114,46 +115,37 @@ const Keywords = () => {
           )
 
           break
-
+        case 400:
+          alert('Klíčové slovo už existuje')
+          break
+        case 500:
         default:
+          alert('Něco se pokazilo. Opakujte akci později.')
           break
       }
-    } catch (error) {}
+    } catch (error) {
+      alert('Něco se pokazilo. Opakujte akci později.')
+    }
   }
 
   if (categories.length) {
     return (
-      <div className="flex gap-x-5 p-5">
-        <div>
-          {categories.map((v) => (
-            <p key={v.id} onClick={() => fetchKeywordsGroup(v.id)}>
-              {v.word}
-            </p>
-          ))}
-        </div>
-        <div>
-          {keywords.map((v) => (
-            <div key={v.id} className="flex w-80 justify-between">
-              <p>{v.word}</p>
-              <button onClick={() => removeRelation(v.id)}>Odebrat</button>
-            </div>
-          ))}
-        </div>
-        {selected != 0 && (
-          <form onSubmit={addRelation}>
-            <select
-              value={addValue}
-              onChange={(e) => setAddValue(parseInt(e.target.value))}
-            >
-              {keywordsList.map((v) => (
-                <option value={v.id} key={v.id}>
-                  {v.word}
-                </option>
-              ))}
-            </select>
-            <input type="submit" name="addRelation" value="Přidat" />
-          </form>
-        )}
+      <div className="p-5">
+        <section className="grid grid-cols-2 mb-5">
+          <h1 className="text-4xl font-bold">Lekce</h1>
+          <h1 className="text-4xl font-bold">Materiály</h1>
+        </section>
+        <LessonForm
+          addRelation={addRelation}
+          addValue={addValue}
+          categories={categories}
+          fetchKeywordsGroup={fetchKeywordsGroup}
+          keywords={keywords}
+          keywordsList={keywordsList}
+          removeRelation={removeRelation}
+          selected={selected}
+          setAddValue={setAddValue}
+        />
       </div>
     )
   }
