@@ -1,34 +1,40 @@
-import { Keyword_lesson_category, Lesson_keyword } from '@prisma/client'
+import useCategoryList from '@/hooks/useCategoryList'
+import useKeywordsList from '@/hooks/useKeywordsList'
+import { Lesson_keyword } from '@prisma/client'
 import {
   settingsLessonDELETEInterface,
   settingsLessonPOSTInterface,
 } from '@projectType/apiInterface'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const Keywords = () => {
   const categories = useCategoryList()
   const keywordsList = useKeywordsList()
 
-  const [selected, setSelected] = useState<number>(1)
+  const [selected, setSelected] = useState<number>(0)
   const [keywords, setKeywords] = useState<Lesson_keyword[]>([])
   const [addValue, setAddValue] = useState<number>(1)
 
   const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
-    const response = await fetch(`/api/settings/lesson?category=${id}`)
-    const body: {
-      data: {
-        keywords: {
-          Keyword: Lesson_keyword
-        }[]
-      }
-    } = await response.json()
-    setKeywords(
-      body.data.keywords.map((v) => ({
-        id: v.Keyword.id,
-        word: v.Keyword.word,
-      }))
-    )
+    try {
+      const response = await fetch(`/api/settings/lesson?category=${id}`)
+      const body: {
+        data: {
+          keywords: {
+            Keyword: Lesson_keyword
+          }[]
+        }
+      } = await response.json()
+      setKeywords(
+        body.data.keywords.map((v) => ({
+          id: v.Keyword.id,
+          word: v.Keyword.word,
+        }))
+      )
+    } catch (error) {
+      return alert('Něco se pokazilo. Opakujte akci později.')
+    }
   }
 
   const removeRelation = async (id: number) => {
@@ -37,24 +43,26 @@ const Keywords = () => {
       keyword: id,
     }
 
-    const send = await fetch('/api/settings/lesson', {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+    try {
+      const send = await fetch('/api/settings/lesson', {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-    switch (send.status) {
-      case 200:
-        return setKeywords((prev) => prev.filter((v) => v.id != id))
-      case 400:
-        return alert('Chybně zadaný požadavek.')
-      case 500:
-        return alert('Chyba na straně serveru. Opakujte akci později.')
-
-      default:
-        break
+      switch (send.status) {
+        case 200:
+          return setKeywords((prev) => prev.filter((v) => v.id != id))
+        case 400:
+          return alert('Chybně zadaný požadavek.')
+        case 500:
+        default:
+          return alert('Něco se pokazilo. Opakujte akci později.')
+      }
+    } catch (error) {
+      return alert('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
@@ -65,21 +73,42 @@ const Keywords = () => {
       category: selected,
       keyword: addValue,
     }
-    const post = await fetch('/api/settings/lesson', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+    try {
+      const post = await fetch('/api/settings/lesson', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-    const json: {
-      data: {
-        id: number
-        word: string
+      const json: {
+        data:
+          | {
+              id: number
+              word: string
+            }
+          | string
+      } = await post.json()
+
+      switch (post.status) {
+        case 201:
+          type jsonData = {
+            data: {
+              id: number
+              word: string
+            }
+          }
+          setKeywords((prev) =>
+            [...prev, (json as jsonData).data].sort((a, b) => a.id - b.id)
+          )
+
+          break
+
+        default:
+          break
       }
-    } = await post.json()
-    setKeywords((prev) => [...prev, json.data].sort((a, b) => a.id - b.id))
+    } catch (error) {}
   }
 
   if (categories.length) {
@@ -100,19 +129,21 @@ const Keywords = () => {
             </div>
           ))}
         </div>
-        <form onSubmit={addRelation}>
-          <select
-            value={addValue}
-            onChange={(e) => setAddValue(parseInt(e.target.value))}
-          >
-            {keywordsList.map((v) => (
-              <option value={v.id} key={v.id}>
-                {v.word}
-              </option>
-            ))}
-          </select>
-          <input type="submit" name="addRelation" value="Přidat" />
-        </form>
+        {selected != 0 && (
+          <form onSubmit={addRelation}>
+            <select
+              value={addValue}
+              onChange={(e) => setAddValue(parseInt(e.target.value))}
+            >
+              {keywordsList.map((v) => (
+                <option value={v.id} key={v.id}>
+                  {v.word}
+                </option>
+              ))}
+            </select>
+            <input type="submit" name="addRelation" value="Přidat" />
+          </form>
+        )}
       </div>
     )
   }
@@ -120,37 +151,3 @@ const Keywords = () => {
 }
 
 export default Keywords
-
-function useCategoryList() {
-  const [categories, setCategories] = useState<Keyword_lesson_category[]>([])
-
-  const fetchCategoryList = async (): Promise<void> => {
-    const response = await fetch('/api/settings/lesson')
-    const body: { data: Keyword_lesson_category[] | string } =
-      await response.json()
-    if (typeof body.data !== 'string') setCategories(body.data)
-  }
-
-  useEffect(() => {
-    fetchCategoryList()
-  }, [])
-
-  return categories
-}
-
-function useKeywordsList() {
-  const [keywordsList, setKeywordList] = useState<Lesson_keyword[]>([])
-
-  const fetchKeywordsList = async () => {
-    const response = await fetch('/api/settings/lesson/keywords')
-    const body: { data: Lesson_keyword[] } = await response.json()
-    console.log(body.data)
-    setKeywordList(body.data)
-  }
-
-  useEffect(() => {
-    fetchKeywordsList()
-  }, [])
-
-  return keywordsList
-}

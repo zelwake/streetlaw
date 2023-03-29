@@ -51,12 +51,22 @@ export default async function handler(
     case 'POST': {
       const { keyword, category }: settingsLessonPOSTInterface = req.body
 
+      const relation = {
+        categoryId: category,
+        keywordId: keyword,
+      }
+
       try {
-        const addRelation = await prisma.keyword_to_lesson_category.create({
-          data: {
-            categoryId: category,
-            keywordId: keyword,
+        const exist = await prisma.keyword_to_lesson_category.findUnique({
+          where: {
+            keywordId_categoryId: relation,
           },
+        })
+
+        if (!exist) return res.status(400).json({ data: 'Bad request' })
+
+        const addRelation = await prisma.keyword_to_lesson_category.create({
+          data: relation,
           select: {
             Keyword: {
               select: {
