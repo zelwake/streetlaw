@@ -22,23 +22,11 @@ export type SubmenuType = {
   slug: string
 }[]
 
-export type LessonFormType = {
-  categories: Keyword_lesson_category[]
-  keywordsList: Lesson_keyword[]
+export type DatabaseFormType = {
+  categories: Keyword_lesson_category[] | Keyword_material_category[]
+  keywordsList: Lesson_keyword[] | Material_keyword[]
   selected: number
-  keywords: Lesson_keyword[]
-  addValue: number
-  fetchKeywordsGroup: (id: number) => Promise<void>
-  removeRelation: (id: number) => Promise<void>
-  addRelation: (e: FormEvent) => Promise<void>
-  setAddValue: Dispatch<SetStateAction<number>>
-}
-
-export type MaterialsFormType = {
-  categories: Keyword_material_category[]
-  keywordsList: Material_keyword[]
-  selected: number
-  keywords: Material_keyword[]
+  keywords: Lesson_keyword[] | Material_keyword[]
   addValue: number
   fetchKeywordsGroup: (id: number) => Promise<void>
   removeRelation: (id: number) => Promise<void>

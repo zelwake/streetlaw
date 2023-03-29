@@ -1,6 +1,6 @@
-import { LessonFormType } from '@projectType/componentTypes'
+import { DatabaseFormType } from '@projectType/componentTypes'
 
-const LessonForm = ({
+const DatabaseForm = ({
   categories,
   keywordsList,
   selected,
@@ -10,7 +10,7 @@ const LessonForm = ({
   removeRelation,
   addRelation,
   setAddValue,
-}: LessonFormType) => {
+}: DatabaseFormType) => {
   return (
     <section className="grid grid-cols-8 gap-x-4">
       <ul className="col-span-2">
@@ -44,7 +44,7 @@ const LessonForm = ({
           <select
             value={addValue}
             onChange={(e) => setAddValue(parseInt(e.target.value))}
-            className=" pl-2 text-xl block"
+            className="pl-2 text-xl block"
           >
             <option value="0" disabled>
               Pro přidání vyberte
@@ -67,4 +67,4 @@ const LessonForm = ({
   )
 }
 
-export default LessonForm
+export default DatabaseForm

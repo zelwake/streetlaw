@@ -2,11 +2,11 @@ import useCategoryList from '@/hooks/useCategoryList'
 import useKeywordsList from '@/hooks/useKeywordsList'
 import { Lesson_keyword } from '@prisma/client'
 import {
-  settingsLessonDELETEInterface,
-  settingsLessonPOSTInterface,
+  settingsDatabaseDELETEInterface,
+  settingsDatabasePOSTInterface,
 } from '@projectType/apiInterface'
 import { useState } from 'react'
-import LessonForm from '../Forms/LessonForm'
+import DatabaseForm from '../Forms/DatabaseForm'
 
 const Keywords = () => {
   const [group, setGroup] = useState<'lessons' | 'materials'>('lessons')
@@ -54,7 +54,7 @@ const Keywords = () => {
   }
 
   const removeRelation = async (id: number) => {
-    const data: settingsLessonDELETEInterface = {
+    const data: settingsDatabaseDELETEInterface = {
       keyword: id,
     }
 
@@ -87,7 +87,7 @@ const Keywords = () => {
   const addRelation = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const data: settingsLessonPOSTInterface = {
+    const data: settingsDatabasePOSTInterface = {
       keyword: addValue,
     }
     try {
@@ -168,7 +168,7 @@ const Keywords = () => {
             Materiály
           </h1>
         </section>
-        <LessonForm
+        <DatabaseForm
           addRelation={addRelation}
           addValue={addValue}
           categories={categories}

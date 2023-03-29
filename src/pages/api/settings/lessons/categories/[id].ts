@@ -4,10 +4,10 @@ import {
   deleteRelation,
   getCategoryKeywords,
   relationExists,
-} from '@/scripts/database/keywordLessonCategory'
+} from '@/scripts/database/keywordLessonsCategory'
 import {
-  settingsLessonDELETEInterface,
-  settingsLessonPOSTInterface,
+  settingsDatabaseDELETEInterface,
+  settingsDatabasePOSTInterface,
 } from '@projectType/apiInterface'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -37,7 +37,7 @@ export default async function handler(
       }
     }
     case 'POST': {
-      const { keyword }: settingsLessonPOSTInterface = req.body
+      const { keyword }: settingsDatabasePOSTInterface = req.body
 
       const relation = {
         categoryId,
@@ -56,7 +56,7 @@ export default async function handler(
       }
     }
     case 'DELETE': {
-      const { keyword }: settingsLessonDELETEInterface = req.body
+      const { keyword }: settingsDatabaseDELETEInterface = req.body
 
       const relation = {
         categoryId,
