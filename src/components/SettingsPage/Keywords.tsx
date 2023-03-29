@@ -18,7 +18,7 @@ const Keywords = () => {
   const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
     try {
-      const response = await fetch(`/api/settings/lesson?category=${id}`)
+      const response = await fetch(`/api/settings/lessons/categories/${id}`)
       switch (response.status) {
         case 200: {
           const body: {
@@ -55,7 +55,7 @@ const Keywords = () => {
     }
 
     try {
-      const send = await fetch('/api/settings/lesson', {
+      const send = await fetch(`/api/settings/lessons/categories/${selected}`, {
         method: 'DELETE',
         headers: {
           'content-type': 'application/json',
@@ -84,7 +84,7 @@ const Keywords = () => {
       keyword: addValue,
     }
     try {
-      const post = await fetch('/api/settings/lesson', {
+      const post = await fetch(`/api/settings/lessons/categories/${selected}`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',

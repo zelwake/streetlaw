@@ -5,7 +5,7 @@ export default function useKeywordsList() {
   const [keywordsList, setKeywordList] = useState<Lesson_keyword[]>([])
 
   const fetchKeywordsList = async () => {
-    const response = await fetch('/api/settings/lesson/keywords')
+    const response = await fetch('/api/settings/lessons/keywords')
     const body: { data: Lesson_keyword[] } = await response.json()
     setKeywordList(body.data)
   }
