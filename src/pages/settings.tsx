@@ -2,6 +2,7 @@ import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
 import Keywords from '@/components/SettingsPage/Keywords'
 import Password from '@/components/SettingsPage/Password'
 import Profile from '@/components/SettingsPage/Profile'
+import Rights from '@/components/SettingsPage/Rights'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import prisma from '@/lib/prisma'
@@ -32,6 +33,7 @@ const ProfilePage = ({ data }: { data: User }) => {
       case 'keywords':
         return <Keywords />
       case 'rights':
+        return <Rights />
       default:
         return null
     }
