@@ -50,5 +50,5 @@ export interface PatchUserRoleRequest {
 }
 
 export interface GetUserRoleResponse {
-  data: SerializedUserRoleList
+  data: SerializedUserRoleList | string
 }
