@@ -42,3 +42,8 @@ export interface settingsDatabaseDELETEInterface {
 export interface settingsDatabasePOSTInterface {
   keyword: number
 }
+
+export interface PatchUserRoleRequest {
+  email: string
+  roleId: number
+}

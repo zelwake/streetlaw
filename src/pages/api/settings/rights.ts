@@ -1,39 +1,29 @@
-import prisma from '@/lib/prisma'
+import { checkToken } from '@/scripts/api/checkToken'
+import { checkRoleLevel } from '@/scripts/api/rights'
+import {
+  getUsersRoleList,
+  updateUserRole,
+} from '@/scripts/database/getUserRole'
+import { PatchUserRoleRequest } from '@projectType/apiInterface'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  //TODO get list of users with their rights who are level 3 or lower
-  //? group them by level
-  //TODO modify selected user rights
-  //? delete users?
+  const token = await checkToken(req)
+  const ADMIN_LEVEL = 4
+
+  const authorized = await checkRoleLevel(token, ADMIN_LEVEL)
+
+  if (!authorized) return res.status(401).json({ data: 'Unauthorized' })
 
   const { method } = req
 
   switch (method) {
     case 'GET': {
       try {
-        const usersAndRoles = await prisma.user.findMany({
-          where: {
-            roleId: {
-              lte: 3,
-            },
-          },
-          orderBy: {
-            roleId: 'asc',
-          },
-          select: {
-            email: true,
-            roleId: true,
-            role: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        })
+        const usersAndRoles = await getUsersRoleList()
 
         return res.status(200).json({ data: usersAndRoles })
       } catch (error) {
@@ -41,46 +31,17 @@ export default async function handler(
       }
     }
     case 'PATCH': {
-      const {
-        email,
-        roleId,
-      }: {
-        email: string
-        roleId: number
-      } = req.body
+      const { email, roleId }: PatchUserRoleRequest = req.body
 
-      if (
-        !email ||
-        !roleId ||
-        typeof email != 'string' ||
-        typeof roleId != 'number'
-      )
+      if (!email || !roleId)
         return res.status(400).json({ data: 'Bad request' })
 
-      const updateRole = await prisma.user.update({
-        where: {
-          email,
-        },
-        data: {
-          roleId,
-        },
-        select: {
-          email: true,
-          roleId: true,
-          role: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      })
+      const updateRole = await updateUserRole(email, roleId)
 
       return res.status(200).json({ data: updateRole })
     }
 
     default:
-      break
+      return res.status(405).json({ data: 'Method not allowed' })
   }
-
-  res.end()
 }
