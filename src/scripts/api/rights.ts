@@ -12,3 +12,35 @@ export async function checkRoleLevel(
     return roleId && roleId >= authorizationLevel ? true : false
   }
 }
+
+type UserRoleList = {
+  email: string
+  role: {
+    name: string
+  }
+  roleId: number
+}[]
+
+export function serializeUserRoleList(list: UserRoleList) {
+  const serialized: SerializedUserRoleList = []
+  console.log(serialized)
+  list.forEach((val) => {
+    if (serialized.some((v) => v.id == val.roleId)) {
+      serialized[val.roleId - 1].users.push(val)
+    } else {
+      serialized[val.roleId - 1] = {
+        id: val.roleId,
+        name: val.role.name,
+        users: [val],
+      }
+    }
+  })
+
+  return serialized
+}
+
+export type SerializedUserRoleList = {
+  id: number
+  name: string
+  users: UserRoleList
+}[]

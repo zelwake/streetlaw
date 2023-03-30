@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma'
+import { serializeUserRoleList } from '../api/rights'
 
 export async function getUserRoleId(id: string): Promise<number | null> {
   const user = await prisma.user.findUnique({
@@ -14,7 +15,7 @@ export async function getUserRoleId(id: string): Promise<number | null> {
 }
 
 export async function getUsersRoleList() {
-  return await prisma.user.findMany({
+  const userRoleList = await prisma.user.findMany({
     where: {
       roleId: {
         lte: 3,
@@ -33,6 +34,8 @@ export async function getUsersRoleList() {
       },
     },
   })
+
+  return serializeUserRoleList(userRoleList)
 }
 
 export async function updateUserRole(email: string, roleId: number) {
