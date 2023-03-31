@@ -1,9 +1,5 @@
-import { SerializedUserRoleList } from '@/scripts/api/rights'
-import {
-  GetUserRoleResponse,
-  PatchUserRoleResponse,
-} from '@projectType/apiInterface'
-import { useCallback, useEffect, useState } from 'react'
+import useUserRoleList from '@/hooks/useUserRoleList'
+import { useState } from 'react'
 
 const roles = ['Uživatel', 'Člen', 'Editor']
 
@@ -13,28 +9,7 @@ const Rights = () => {
     roleId: number
   }>({ email: '', roleId: 0 })
 
-  const [userList, setUserList] = useState<SerializedUserRoleList>([])
-
-  const fetchUserList = useCallback(async () => {
-    const response = await fetch('/api/settings/rights')
-    const body: GetUserRoleResponse = await response.json()
-
-    if (typeof body.data === 'string') {
-      switch (response.status) {
-        case 401:
-          alert('Nemáte přístup')
-          break
-        case 500:
-        default:
-          alert('Něco se pokazilo. Opakujte akci později.')
-          break
-      }
-    } else setUserList(body.data)
-  }, [])
-
-  useEffect(() => {
-    fetchUserList()
-  }, [fetchUserList])
+  const { userList, updateUserList } = useUserRoleList()
 
   const updateRole = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,30 +24,18 @@ const Rights = () => {
     const json = await patch.json()
     switch (patch.status) {
       case 200:
-        setUserList((prev) =>
-          prev
-            .map((role) => {
-              return {
-                ...role,
-                users: role.users.filter(
-                  (user) => user.email !== userRoleForm.email
-                ),
-              }
-            })
-            .map((role) => {
-              if (role.id === userRoleForm.roleId) {
-                return {
-                  ...role,
-                  users: [...role.users, (json as PatchUserRoleResponse).data],
-                }
-              } else {
-                return role
-              }
-            })
-        )
+        updateUserList(userRoleForm, json)
+        break
+      case 400:
+        alert('Špatně zadané údaje.')
+        break
+      case 401:
+        alert('Nemáte přístup.')
         break
 
+      case 500:
       default:
+        alert('Něco se pokazilo. Opakujte akci později.')
         break
     }
   }
