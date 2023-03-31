@@ -1,13 +1,13 @@
+import RightsForm from '@/components/Forms/RightsForm'
 import useUserRoleList from '@/hooks/useUserRoleList'
+import { UserRoleForm } from '@projectType/componentTypes'
 import { useState } from 'react'
 
-const roles = ['Uživatel', 'Člen', 'Editor']
-
 const Rights = () => {
-  const [userRoleForm, setUserRoleForm] = useState<{
-    email: string
-    roleId: number
-  }>({ email: '', roleId: 0 })
+  const [userRoleForm, setUserRoleForm] = useState<UserRoleForm>({
+    email: '',
+    roleId: 0,
+  })
 
   const { userList, updateUserList } = useUserRoleList()
 
@@ -41,42 +41,12 @@ const Rights = () => {
   }
 
   return (
-    <div className="p-5">
-      {userList.map((group) => (
-        <ul key={group.id}>
-          <h2>{roles[group.id - 1]}</h2>
-          {group.users.map((user) => (
-            <li
-              key={user.email}
-              onClick={() =>
-                setUserRoleForm({ email: user.email, roleId: user.roleId })
-              }
-            >
-              {user.email}
-            </li>
-          ))}
-        </ul>
-      ))}
-      {userRoleForm.roleId != 0 && (
-        <form onSubmit={updateRole}>
-          <label>{userRoleForm.email}</label>
-          <select
-            value={userRoleForm.roleId}
-            onChange={(e) =>
-              setUserRoleForm((prev) => ({
-                ...prev,
-                roleId: Number(e.target.value),
-              }))
-            }
-          >
-            <option value="1">Uživatel</option>
-            <option value="2">Člen</option>
-            <option value="3">Editor</option>
-          </select>
-          <input type="submit" value="Změnit" />
-        </form>
-      )}
-    </div>
+    <RightsForm
+      setUserRoleForm={setUserRoleForm}
+      updateRole={updateRole}
+      userList={userList}
+      userRoleForm={userRoleForm}
+    />
   )
 }
 
