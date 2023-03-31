@@ -49,6 +49,16 @@ export interface PatchUserRoleRequest {
   roleId: number
 }
 
+export interface PatchUserRoleResponse {
+  data: {
+    email: string
+    roleId: number
+    role: {
+      name: string
+    }
+  }
+}
+
 export interface GetUserRoleResponse {
   data: SerializedUserRoleList | string
 }

@@ -28,17 +28,13 @@ export type SerializedUserRoleList = {
 }[]
 
 export function serializeUserRoleList(list: UserRoleList) {
-  const serialized: SerializedUserRoleList = []
+  const serialized: SerializedUserRoleList = [
+    { id: 1, name: 'user', users: [] },
+    { id: 2, name: 'member', users: [] },
+    { id: 3, name: 'editor', users: [] },
+  ]
   list.forEach((val) => {
-    if (serialized.some((v) => v.id == val.roleId)) {
-      serialized[val.roleId - 1].users.push(val)
-    } else {
-      serialized[val.roleId - 1] = {
-        id: val.roleId,
-        name: val.role.name,
-        users: [val],
-      }
-    }
+    serialized[val.roleId - 1].users.push(val)
   })
 
   return serialized

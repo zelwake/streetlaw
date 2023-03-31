@@ -1,5 +1,8 @@
 import { SerializedUserRoleList } from '@/scripts/api/rights'
-import { GetUserRoleResponse } from '@projectType/apiInterface'
+import {
+  GetUserRoleResponse,
+  PatchUserRoleResponse,
+} from '@projectType/apiInterface'
 import { useCallback, useEffect, useState } from 'react'
 
 const roles = ['Uživatel', 'Člen', 'Editor']
@@ -43,10 +46,30 @@ const Rights = () => {
       body: JSON.stringify(userRoleForm),
     })
 
-    const json = patch.json()
+    const json = await patch.json()
     switch (patch.status) {
       case 200:
-        fetchUserList()
+        setUserList((prev) =>
+          prev
+            .map((role) => {
+              return {
+                ...role,
+                users: role.users.filter(
+                  (user) => user.email !== userRoleForm.email
+                ),
+              }
+            })
+            .map((role) => {
+              if (role.id === userRoleForm.roleId) {
+                return {
+                  ...role,
+                  users: [...role.users, (json as PatchUserRoleResponse).data],
+                }
+              } else {
+                return role
+              }
+            })
+        )
         break
 
       default:
