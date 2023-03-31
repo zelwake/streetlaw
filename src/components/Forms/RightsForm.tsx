@@ -1,17 +1,20 @@
 import { SerializedUserRoleList } from '@/scripts/api/rights'
 import { UserRoleForm } from '@projectType/componentTypes'
 import { Dispatch, SetStateAction } from 'react'
+import AlertMessage from '../AlertMessage'
 
 const RightsForm = ({
   userList,
   setUserRoleForm,
   userRoleForm,
   updateRole,
+  updateMessage,
 }: {
   userList: SerializedUserRoleList
   setUserRoleForm: Dispatch<SetStateAction<UserRoleForm>>
   userRoleForm: UserRoleForm
   updateRole: (e: React.FormEvent) => Promise<void>
+  updateMessage: string
 }) => {
   const roles = ['Uživatel', 'Člen', 'Editor']
   return (
@@ -48,13 +51,13 @@ const RightsForm = ({
       {userRoleForm.roleId != 0 && (
         <form
           onSubmit={updateRole}
-          className="flex flex-col gap-8 items-center justify-center grow"
+          className="flex flex-col gap-6 items-center justify-center grow relative"
         >
           <label className="text-lg uppercase tracking-wide">
             {userRoleForm.email}
           </label>
           <select
-            className="text-xl px-5 py-1 cursor-pointer"
+            className="text-xl px-5 py-1 cursor-pointer w-40 text-center"
             value={userRoleForm.roleId}
             onChange={(e) =>
               setUserRoleForm((prev) => ({
@@ -70,7 +73,11 @@ const RightsForm = ({
           <input
             type="submit"
             value="Změnit"
-            className="px-6 py-2 text-xl bg-streetlaw-500 text-white cursor-pointer"
+            className="px-3 py-1 text-xl bg-streetlaw-500 text-white cursor-pointer"
+          />
+          <AlertMessage
+            message={updateMessage}
+            style="bottom-16 text-lg text-gray-400"
           />
         </form>
       )}

@@ -9,6 +9,8 @@ const Rights = () => {
     roleId: 0,
   })
 
+  const [updateMessage, setUpdateMessage] = useState<string>('')
+
   const { userList, updateUserList } = useUserRoleList()
 
   const updateRole = async (e: React.FormEvent) => {
@@ -25,17 +27,18 @@ const Rights = () => {
     switch (patch.status) {
       case 200:
         updateUserList(userRoleForm, json)
+        setUpdateMessage('Změna role proběhla úspěšně.')
         break
       case 400:
-        alert('Špatně zadané údaje.')
+        setUpdateMessage('Špatně zadané údaje.')
         break
       case 401:
-        alert('Nemáte přístup.')
+        setUpdateMessage('Nemáte přístup.')
         break
 
       case 500:
       default:
-        alert('Něco se pokazilo. Opakujte akci později.')
+        setUpdateMessage('Něco se pokazilo. Opakujte akci později.')
         break
     }
   }
@@ -46,6 +49,7 @@ const Rights = () => {
       updateRole={updateRole}
       userList={userList}
       userRoleForm={userRoleForm}
+      updateMessage={updateMessage}
     />
   )
 }
