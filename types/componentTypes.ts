@@ -33,3 +33,8 @@ export type DatabaseFormType = {
   addRelation: (e: FormEvent) => Promise<void>
   setAddValue: Dispatch<SetStateAction<number>>
 }
+
+export type UserRoleForm = {
+  email: string
+  roleId: number
+}

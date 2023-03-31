@@ -1,3 +1,4 @@
+import { SerializedUserRoleList } from '@/scripts/api/rights'
 import {
   Keyword_lesson_category,
   Keyword_material_category,
@@ -41,4 +42,23 @@ export interface settingsDatabaseDELETEInterface {
 
 export interface settingsDatabasePOSTInterface {
   keyword: number
+}
+
+export interface PatchUserRoleRequest {
+  email: string
+  roleId: number
+}
+
+export interface PatchUserRoleResponse {
+  data: {
+    email: string
+    roleId: number
+    role: {
+      name: string
+    }
+  }
+}
+
+export interface GetUserRoleResponse {
+  data: SerializedUserRoleList | string
 }

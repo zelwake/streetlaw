@@ -144,8 +144,8 @@ const Keywords = () => {
       <div className="p-5">
         <section className="grid grid-cols-2 mb-5">
           <h1
-            className={`text-4xl cursor-pointer w-fit ${
-              group == 'lessons' && 'font-bold'
+            className={`text-4xl cursor-pointer w-fit  ${
+              group == 'lessons' ? 'font-bold text-black' : 'text-gray-400'
             }`}
             onClick={() => {
               setGroup('lessons')
@@ -156,8 +156,8 @@ const Keywords = () => {
             Lekce
           </h1>
           <h1
-            className={`text-4xl cursor-pointer w-fit ${
-              group == 'materials' && 'font-bold'
+            className={`text-4xl cursor-pointer w-fit  ${
+              group == 'materials' ? 'font-bold text-black' : 'text-gray-400'
             }`}
             onClick={() => {
               setGroup('materials')

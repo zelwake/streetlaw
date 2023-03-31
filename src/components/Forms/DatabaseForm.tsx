@@ -19,7 +19,7 @@ const DatabaseForm = ({
             key={v.id}
             onClick={() => fetchKeywordsGroup(v.id)}
             className={`text-xl mb-1 cursor-pointer hover:outline-2 hover:outline-streetlaw-500 ${
-              v.id == selected ? 'text-black' : 'text-gray-400'
+              v.id == selected ? 'text-black font-semibold' : 'text-gray-400'
             }`}
           >
             {v.word}
