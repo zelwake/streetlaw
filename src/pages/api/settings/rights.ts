@@ -36,9 +36,13 @@ export default async function handler(
       if (!email || !roleId)
         return res.status(400).json({ data: 'Bad request' })
 
-      const updateRole = await updateUserRole(email, roleId)
+      try {
+        const updateRole = await updateUserRole(email, roleId)
 
-      return res.status(200).json({ data: updateRole })
+        return res.status(200).json({ data: updateRole })
+      } catch (error) {
+        return res.status(500).json({ data: 'Internal server error' })
+      }
     }
 
     default:
