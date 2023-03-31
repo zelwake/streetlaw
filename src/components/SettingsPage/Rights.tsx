@@ -15,31 +15,37 @@ const Rights = () => {
 
   const updateRole = async (e: React.FormEvent) => {
     e.preventDefault()
-    const patch = await fetch('/api/settings/rights', {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(userRoleForm),
-    })
 
-    const json = await patch.json()
-    switch (patch.status) {
-      case 200:
-        updateUserList(userRoleForm, json)
-        setUpdateMessage('Změna role proběhla úspěšně.')
-        break
-      case 400:
-        setUpdateMessage('Špatně zadané údaje.')
-        break
-      case 401:
-        setUpdateMessage('Nemáte přístup.')
-        break
+    try {
+      const patch = await fetch('/api/settings/rights', {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(userRoleForm),
+      })
 
-      case 500:
-      default:
-        setUpdateMessage('Něco se pokazilo. Opakujte akci později.')
-        break
+      const json = await patch.json()
+
+      switch (patch.status) {
+        case 200:
+          updateUserList(userRoleForm, json)
+          setUpdateMessage('Změna role proběhla úspěšně.')
+          break
+        case 400:
+          setUpdateMessage('Špatně zadané údaje.')
+          break
+        case 401:
+          setUpdateMessage('Nemáte přístup.')
+          break
+
+        case 500:
+        default:
+          setUpdateMessage('Něco se pokazilo. Opakujte akci později.')
+          break
+      }
+    } catch (error) {
+      return setUpdateMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 

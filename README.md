@@ -43,7 +43,7 @@ This project is created by [Michal Hladík](https://github.com/zelwake/huli-alum
 
 ### APIs
 
-- ##### POST: `/api/auth/register`
+- ##### POST: `/api/auth/register/`
 
         request
         body = {
@@ -60,6 +60,55 @@ This project is created by [Michal Hladík](https://github.com/zelwake/huli-alum
         successful response:
         status(201)
         json({ message: string })
+
+- ##### GET: `/api/settings/rights/`
+
+        request:
+        nothing
+
+        error response:
+        status(401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({
+                data: [{
+                        id: number
+                        name: string
+                        users: [{
+                                email: string
+                                role: {
+                                        name: string
+                                }
+                                roleId: number
+                        }]
+                }]
+        })
+
+- ##### PATCH: `/api/settings/rights/`
+
+        request:
+        body = {
+                email: string,
+                roleId: number
+        }
+
+        error response:
+        status(400, 401, 500)
+        json({ data: string })
+
+        successful response:
+        status(200)
+        json({
+                data: {
+                        email: string
+                        role: {
+                                name: string
+                        }
+                        roleId: number
+                }
+        })
 
 - ##### GET: `/api/settings/lessons/keywords/`
 
