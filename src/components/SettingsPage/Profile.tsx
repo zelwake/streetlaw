@@ -24,7 +24,7 @@ const Profile = ({
       return alert('Chybí jméno nebo příjmení.')
 
     try {
-      const response = await fetch('/api/user', {
+      const response = await fetch('/api/settings/user', {
         method: 'PUT',
         headers: {
           'content-type': 'application/json',
