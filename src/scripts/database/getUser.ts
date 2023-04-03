@@ -1,8 +1,13 @@
 import prisma from '@/lib/prisma'
 
-export async function checkUserInDatabase(
+export enum UserUnique {
+  'email' = 'email',
+  'id' = 'id',
+}
+
+export async function getUser(
   value: string,
-  column: 'email' | 'username'
+  column: UserUnique
 ): Promise<boolean> {
   const result = await prisma.user.findUnique({
     where: {

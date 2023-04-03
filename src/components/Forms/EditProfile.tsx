@@ -17,57 +17,57 @@ const EditProfile = ({
   return (
     <form
       onSubmit={(event) => editProfile(event)}
-      className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-y-12 relative"
+      className="my-8 gap-y-4 flex flex-col relative"
     >
       <label htmlFor="name" className="profile-label">
-        Jméno:
+        <span className="profile-span">Jméno:</span>
+        <input
+          id="name"
+          type="text"
+          className="profile-input"
+          value={updateForm.firstName}
+          onChange={(e) =>
+            setUpdateForm((prev) => ({
+              ...prev,
+              firstName: e.target.value,
+            }))
+          }
+        />
       </label>
-      <input
-        id="name"
-        type="text"
-        className="profile-input"
-        value={updateForm.firstName}
-        onChange={(e) =>
-          setUpdateForm((prev) => ({
-            ...prev,
-            firstName: e.target.value,
-          }))
-        }
-      />
       <label htmlFor="surname" className="profile-label">
-        Příjmení:
+        <span className="profile-span">Příjmení:</span>
+        <input
+          id="surname"
+          type="text"
+          className="profile-input"
+          value={updateForm.lastName}
+          onChange={(e) =>
+            setUpdateForm((prev) => ({
+              ...prev,
+              lastName: e.target.value,
+            }))
+          }
+        />
       </label>
-      <input
-        id="surname"
-        type="text"
-        className="profile-input"
-        value={updateForm.lastName}
-        onChange={(e) =>
-          setUpdateForm((prev) => ({
-            ...prev,
-            lastName: e.target.value,
-          }))
-        }
-      />
-      <label htmlFor="about" className="profile-label place-self-start">
-        Popis:
+      <label htmlFor="about" className="profile-label">
+        <span className="profile-span">Popis:</span>
+        <textarea
+          id="about"
+          cols={64}
+          rows={10}
+          className="resize-none grow overflow-y-scroll outline-none py-1 px-3 bg-gray-50 text-xl"
+          value={updateForm.description}
+          onChange={(e) =>
+            setUpdateForm((prev) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }
+        ></textarea>
       </label>
-      <textarea
-        id="about"
-        cols={64}
-        rows={10}
-        className="col-span-4 resize-none overflow-y-scroll outline-none py-1 px-3 text-xl bg-gray-100"
-        value={updateForm.description}
-        onChange={(e) =>
-          setUpdateForm((prev) => ({
-            ...prev,
-            description: e.target.value,
-          }))
-        }
-      ></textarea>
       <label
         htmlFor="photo"
-        className="absolute top-1 right-16 bg-zinc-300 cursor-pointer"
+        className="absolute top-0 right-12 bg-zinc-300 cursor-pointer"
         onMouseEnter={() => setShowPhotoText(true)}
         onMouseLeave={() => setShowPhotoText(false)}
       >
@@ -79,13 +79,16 @@ const EditProfile = ({
           className={`rounded-full ${showPhotoText && 'blur-sm'}`}
         />
         {showPhotoText && (
-          <p className="absolute w-full text-xl text-center top-16">
+          <p className="absolute w-full text-xl text-center top-14">
             Změnit fotografii
           </p>
         )}
       </label>
       <input id="photo" type="file" accept="image/*" className="hidden" />
-      <SubmitButton className="relative -right-5 col-start-5" value="Uložit" />
+      <SubmitButton
+        className="relative self-end right-[271px]"
+        value="Uložit"
+      />
     </form>
   )
 }

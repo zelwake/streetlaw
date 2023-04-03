@@ -16,11 +16,15 @@
   }
 
   .profile-label {
-    @apply text-2xl w-48 font-semibold;
+    @apply flex w-3/4 items-baseline;
   }
 
   .profile-input {
-    @apply border-b-[1px] w-[32rem] border-black pl-3 pt-2 text-xl outline-none col-span-4;
+    @apply border-b-2 grow border-b-gray-400 pl-3 pt-1 text-xl outline-none bg-gray-50;
+  }
+
+  .profile-span {
+    @apply inline-block text-right w-32 pr-3 text-xl text-gray-500 font-semibold;
   }
 
   .password-label {
