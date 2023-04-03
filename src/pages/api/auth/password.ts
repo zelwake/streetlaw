@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
+import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import { comparePasswordHash, hashedPassword } from '@/scripts/hash/bcrypt'
 import { validatePassword } from '@/scripts/validateCredentials'
 import {
@@ -14,7 +15,9 @@ export default async function handler(
 ) {
   const token = await checkToken(req)
 
-  if (!token) return res.status(401).json({ data: 'Unauthorized' })
+  const authorized = await checkRoleLevel(token, AuthorizationLevel.Member)
+
+  if (!authorized) return res.status(401).json({ data: 'Unauthorized' })
 
   if (req.method === 'PUT') {
     const { oldPassword, newPassword }: PasswordInterface = req.body
@@ -25,7 +28,7 @@ export default async function handler(
     try {
       const userPassword = await prisma.user.findUnique({
         where: {
-          id: token.sub,
+          id: token?.sub,
         },
         select: {
           password: true,
@@ -38,7 +41,7 @@ export default async function handler(
         oldPassword,
         userPassword.password
       )
-      console.log(rightPassword)
+
       if (!rightPassword)
         return res.status(400).json({ data: 'Wrong credentials' })
 
@@ -49,7 +52,7 @@ export default async function handler(
 
       await prisma.user.update({
         where: {
-          id: token.sub,
+          id: token?.sub,
         },
         data: {
           password: hashed,

@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
+import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import {
   UpdateFormInterface,
   UserPUTInterface,
@@ -12,7 +13,9 @@ export default async function handler(
 ) {
   const token = await checkToken(req)
 
-  if (!token) return res.status(401).json({ data: 'Unauthorized' })
+  const authorized = await checkRoleLevel(token, AuthorizationLevel.Member)
+
+  if (!authorized) return res.status(401).json({ data: 'Unauthorized' })
 
   switch (req.method) {
     case 'PUT':
@@ -29,7 +32,7 @@ export default async function handler(
       try {
         await prisma.user.update({
           where: {
-            id: token.sub,
+            id: token?.sub,
           },
           data: {
             firstName,

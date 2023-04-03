@@ -1,4 +1,5 @@
 import { checkToken } from '@/scripts/api/checkToken'
+import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import {
   createRelation,
   deleteRelation,
@@ -17,8 +18,9 @@ export default async function handler(
 ) {
   const token = await checkToken(req)
 
-  if (!token || token.roleId < 3)
-    return res.status(401).json({ data: 'Unauthorized' })
+  const authorized = await checkRoleLevel(token, AuthorizationLevel.Editor)
+
+  if (!authorized) return res.status(401).json({ data: 'Unauthorized' })
 
   const { method } = req
   const { id } = req.query

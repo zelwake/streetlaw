@@ -1,5 +1,5 @@
 import { checkToken } from '@/scripts/api/checkToken'
-import { checkRoleLevel } from '@/scripts/api/rights'
+import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import {
   getUsersRoleList,
   updateUserRole,
@@ -12,9 +12,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const token = await checkToken(req)
-  const ADMIN_LEVEL = 4
 
-  const authorized = await checkRoleLevel(token, ADMIN_LEVEL)
+  const authorized = await checkRoleLevel(token, AuthorizationLevel.Admin)
 
   if (!authorized) return res.status(401).json({ data: 'Unauthorized' })
 

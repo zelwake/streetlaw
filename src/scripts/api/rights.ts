@@ -1,9 +1,16 @@
 import { JWT } from 'next-auth/jwt/types'
 import { getUserRoleId } from '../database/getUserRole'
 
+export enum AuthorizationLevel {
+  'User' = 1,
+  'Member',
+  'Editor',
+  'Admin',
+}
+
 export async function checkRoleLevel(
   token: JWT | null,
-  authorizationLevel: number
+  authorizationLevel: AuthorizationLevel
 ): Promise<boolean> {
   if (!token || !token.sub) return false
   else {
