@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
 import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
+import { updateUserInfo } from '@/scripts/api/user'
 import {
   UpdateFormInterface,
   UserPUTInterface,
@@ -30,17 +30,13 @@ export default async function handler(
         return res.status(400).json({ data: 'Chybí jméno nebo příjmení.' })
 
       try {
-        await prisma.user.update({
-          where: {
-            id: token?.sub,
-          },
-          data: {
-            firstName,
-            lastName,
-            photoUrl,
-            description,
-          },
-        })
+        await updateUserInfo(
+          token?.sub as string,
+          firstName,
+          lastName,
+          photoUrl,
+          description
+        )
         return res.status(200).json({ data: 'Změněno.' })
       } catch (error) {
         console.log(error)
