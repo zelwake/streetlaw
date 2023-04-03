@@ -57,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       if (!result) {
         data.error = 'Neplatné údaje'
-        console.log(data)
       } else {
         const { hash, expiration } = result
 
@@ -68,14 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         } else {
           const { password, firstName, email, lastName } = result
 
-          await prisma.user.create({
-            data: {
-              password,
-              email,
-              firstName,
-              lastName,
-            },
-          })
+          await createUser(password, email, firstName, lastName)
 
           await removeTokenFromDatabase(id.toString())
 
@@ -91,6 +83,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: data,
   }
+}
+
+async function createUser(
+  password: string,
+  email: string,
+  firstName: string,
+  lastName: string
+) {
+  await prisma.user.create({
+    data: {
+      password,
+      email,
+      firstName,
+      lastName,
+    },
+  })
 }
 
 async function removeTokenFromDatabase(id: string) {
