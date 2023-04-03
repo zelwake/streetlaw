@@ -1,5 +1,5 @@
 import { createTransporter } from '@/lib/nodemailer'
-import prisma from '@/lib/prisma'
+import { createTemporaryUser } from '@/scripts/api/register'
 import { createMailPayload } from '@/scripts/createMailPayload'
 import { checkUserInDatabase } from '@/scripts/database/checkUserDatabase'
 import { hashedPassword } from '@/scripts/hash/bcrypt'
@@ -42,26 +42,12 @@ export default async function handler(
       const emailVerificationHash = randomHash()
       const expirationTime = setExpirationDate()
 
-      const created = await prisma.verification.upsert({
-        where: {
-          email: body.email,
-        },
-        update: {
-          hash: emailVerificationHash,
-          expiration: expirationTime,
-          password: passwordHash,
-          firstName: body.firstName,
-          lastName: body.lastName,
-        },
-        create: {
-          password: passwordHash,
-          firstName: body.firstName,
-          lastName: body.lastName,
-          email: body.email,
-          hash: emailVerificationHash,
-          expiration: expirationTime,
-        },
-      })
+      const created = await createTemporaryUser(
+        body,
+        emailVerificationHash,
+        expirationTime,
+        passwordHash
+      )
 
       const transporter = createTransporter()
 
