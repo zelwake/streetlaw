@@ -1,7 +1,7 @@
 import RightsForm from '@/components/Forms/RightsForm'
 import useUserRoleList from '@/hooks/useUserRoleList'
 import { UserRoleForm } from '@projectType/componentTypes'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Rights = () => {
   const [userRoleForm, setUserRoleForm] = useState<UserRoleForm>({
@@ -12,6 +12,11 @@ const Rights = () => {
   const [updateMessage, setUpdateMessage] = useState<string>('')
 
   const { userList, updateUserList } = useUserRoleList()
+
+  useEffect(() => {
+    // on user or role change, remove message
+    setUpdateMessage('')
+  }, [userRoleForm])
 
   const updateRole = async (e: React.FormEvent) => {
     e.preventDefault()
