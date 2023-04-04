@@ -26,7 +26,7 @@ export default async function handler(
         description,
       }: UpdateFormInterface = req.body
 
-      if (firstName.trim() || lastName.trim())
+      if (!firstName.trim() || !lastName.trim())
         return res.status(400).json({ data: 'Chybí jméno nebo příjmení.' })
 
       try {

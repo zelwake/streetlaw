@@ -5,8 +5,9 @@ import Profile from '@/components/SettingsPage/Profile'
 import Rights from '@/components/SettingsPage/Rights'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
-import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
+import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
+import { getUser } from '@/scripts/database/getUser'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
@@ -44,7 +45,9 @@ const ProfilePage = ({ data }: { data: User }) => {
       <Header />
       <div className="m-auto w-sl">
         <section className="w-full h-24 bg-streetlaw-500 pl-5 flex items-center">
-          <h1 className="text-6xl font-semibold text-white">Nastavení</h1>
+          <h1 className="text-6xl tracking-wide font-semibold text-white">
+            Nastavení
+          </h1>
         </section>
         <section className="w-full mt-20 shadow-sl flex">
           <ProfilePageMenu setSlug={setSlug} slug={slug} submenu={submenu} />
@@ -64,19 +67,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const token = await checkToken(req)
 
-    if (!token)
+    const verification = await checkRoleLevel(token, AuthorizationLevel.Member)
+
+    if (!verification)
       return {
         redirect: {
-          destination: '/401?error=unauthorized',
+          destination: '/',
           permanent: false,
         },
       }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: token.sub,
-      },
-    })
+    const user = await getUser(token?.sub as string)
+
+    console.log(user)
 
     return {
       props: { data: user },
@@ -85,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     console.log(e)
     return {
       redirect: {
-        destination: '/500?error=internalservererror',
+        destination: '/error?error=500',
         permanent: false,
       },
     }

@@ -87,6 +87,8 @@ const Keywords = () => {
   const addRelation = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (addValue == 0) return alert('Vyberte slovo k přidání.')
+
     const data: settingsDatabasePOSTInterface = {
       keyword: addValue,
     }

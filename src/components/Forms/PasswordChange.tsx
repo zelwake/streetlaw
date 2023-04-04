@@ -14,39 +14,41 @@ const PasswordChange = ({
   return (
     <form
       onSubmit={changePassword}
-      className="grid grid-cols-5 items-center pl-9 pr-16 my-7 gap-7 relative"
+      className="my-8 gap-y-4 flex flex-col relative"
     >
       <label htmlFor="oldPassword" className="password-label">
-        Staré heslo
+        <p className="settings-span">Staré heslo</p>
+        <input
+          id="oldPassword"
+          type="password"
+          className="settings-input"
+          value={passwords.oldPassword}
+          onChange={(e) => {
+            setPasswords((prev) => ({
+              ...prev,
+              oldPassword: e.target.value,
+            }))
+          }}
+        />
       </label>
-      <input
-        id="oldPassword"
-        type="password"
-        className="password-input"
-        value={passwords.oldPassword}
-        onChange={(e) => {
-          setPasswords((prev) => ({
-            ...prev,
-            oldPassword: e.target.value,
-          }))
-        }}
-      />
       <label htmlFor="newPassword" className="password-label">
-        Nové heslo
+        <p className="settings-span">Nové heslo</p>
+        <input
+          id="newPassword"
+          type="password"
+          className="settings-input"
+          value={passwords.newPassword}
+          onChange={(e) => {
+            setPasswords((prev) => ({
+              ...prev,
+              newPassword: e.target.value,
+            }))
+          }}
+        />
       </label>
-      <input
-        id="newPassword"
-        type="password"
-        className="password-input"
-        value={passwords.newPassword}
-        onChange={(e) => {
-          setPasswords((prev) => ({
-            ...prev,
-            newPassword: e.target.value,
-          }))
-        }}
-      />
-      <SubmitButton value="Změnit" className="col-start-5" />
+      <div className="password-label justify-end">
+        <SubmitButton value="Změnit" className="col-start-5" />
+      </div>
     </form>
   )
 }

@@ -1,7 +1,7 @@
 import { createTransporter } from '@/lib/nodemailer'
 import { createTemporaryUser } from '@/scripts/api/register'
 import { createMailPayload } from '@/scripts/createMailPayload'
-import { checkUserInDatabase } from '@/scripts/database/checkUserDatabase'
+import { UserUnique, userExist } from '@/scripts/database/userExist'
 import { hashedPassword } from '@/scripts/hash/bcrypt'
 import { randomHash } from '@/scripts/hash/randomHash'
 import { setExpirationDate } from '@/scripts/timeDate/expirationTime'
@@ -28,7 +28,7 @@ export default async function handler(
   const body: RegisterType = req.body
 
   try {
-    const emailExist = await checkUserInDatabase(body.email, 'email')
+    const emailExist = await userExist(UserUnique.email, body.email)
 
     if (emailExist)
       return res.status(400).json({ error: 'Email už je registrován' })

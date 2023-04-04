@@ -32,7 +32,7 @@ const DatabaseForm = ({
             <p className="text-xl">{v.word}</p>
             <button
               onClick={() => removeRelation(v.id)}
-              className="text-base bg-red-500 px-1 text-white hover:border-l-2 hover:border-l-red-900 "
+              className="bg-red-500 px-2 text-white hover:border-l-2 hover:border-l-red-900 "
             >
               Odebrat
             </button>
@@ -57,9 +57,8 @@ const DatabaseForm = ({
           </select>
           <input
             type="submit"
-            name="addRelation"
             value="Přidat"
-            className="cursor-pointer bg-streetlaw-500 w-fit text-lg text-white px-2 self-end mt-5 hover:border-l-2 hover:border-l-green-700"
+            className="cursor-pointer bg-streetlaw-500 w-fit text-lg text-white px-2 self-end mt-6 hover:border-l-2 hover:border-l-green-700"
           />
         </form>
       )}
