@@ -2,6 +2,7 @@ import { SerializedUserRoleList } from '@/scripts/api/rights'
 import { UserRoleForm } from '@projectType/componentTypes'
 import { Dispatch, SetStateAction } from 'react'
 import AlertMessage from '../AlertMessage'
+import SubmitButton from '../SubmitButton'
 
 const RightsForm = ({
   userList,
@@ -53,31 +54,32 @@ const RightsForm = ({
           onSubmit={updateRole}
           className="flex flex-col gap-6 items-center justify-center grow relative"
         >
-          <label className="text-lg uppercase tracking-wide">
+          <label className="text-lg uppercase tracking-wider">
             {userRoleForm.email}
           </label>
-          <select
-            className="text-xl px-5 py-1 cursor-pointer w-40 text-center"
-            value={userRoleForm.roleId}
-            onChange={(e) =>
-              setUserRoleForm((prev) => ({
-                ...prev,
-                roleId: Number(e.target.value),
-              }))
-            }
-          >
-            <option value="1">Uživatel</option>
-            <option value="2">Člen</option>
-            <option value="3">Editor</option>
-          </select>
-          <input
-            type="submit"
-            value="Změnit"
-            className="px-3 py-1 text-xl bg-streetlaw-500 text-white cursor-pointer"
-          />
+          <div className="flex gap-10">
+            <select
+              className="text-xl px-5 py-1 cursor-pointer w-40 text-center"
+              value={userRoleForm.roleId}
+              onChange={(e) =>
+                setUserRoleForm((prev) => ({
+                  ...prev,
+                  roleId: Number(e.target.value),
+                }))
+              }
+            >
+              <option value="1">Uživatel</option>
+              <option value="2">Člen</option>
+              <option value="3">Editor</option>
+            </select>
+            <SubmitButton
+              value="Změnit"
+              className="text-xl font-normal border-l-2 border-l-white"
+            />
+          </div>
           <AlertMessage
             message={updateMessage}
-            style="bottom-16 text-lg text-gray-400"
+            style="bottom-20 text-lg text-gray-400"
           />
         </form>
       )}
