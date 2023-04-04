@@ -16,12 +16,12 @@ const PasswordChange = ({
       onSubmit={changePassword}
       className="my-8 gap-y-4 flex flex-col relative"
     >
-      <label htmlFor="oldPassword" className="profile-label">
-        <p className="profile-span">Staré heslo</p>
+      <label htmlFor="oldPassword" className="password-label">
+        <p className="settings-span">Staré heslo</p>
         <input
           id="oldPassword"
           type="password"
-          className="profile-input"
+          className="settings-input"
           value={passwords.oldPassword}
           onChange={(e) => {
             setPasswords((prev) => ({
@@ -31,12 +31,12 @@ const PasswordChange = ({
           }}
         />
       </label>
-      <label htmlFor="newPassword" className="profile-label">
-        <p className="profile-span">Nové heslo</p>
+      <label htmlFor="newPassword" className="password-label">
+        <p className="settings-span">Nové heslo</p>
         <input
           id="newPassword"
           type="password"
-          className="profile-input"
+          className="settings-input"
           value={passwords.newPassword}
           onChange={(e) => {
             setPasswords((prev) => ({
@@ -46,7 +46,9 @@ const PasswordChange = ({
           }}
         />
       </label>
-      <SubmitButton value="Změnit" className="col-start-5" />
+      <div className="password-label justify-end">
+        <SubmitButton value="Změnit" className="col-start-5" />
+      </div>
     </form>
   )
 }

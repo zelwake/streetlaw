@@ -19,12 +19,12 @@ const EditProfile = ({
       onSubmit={(event) => editProfile(event)}
       className="my-8 gap-y-4 flex flex-col relative"
     >
-      <label htmlFor="name" className="profile-label">
-        <span className="profile-span">Jméno</span>
+      <label htmlFor="name" className="settings-label">
+        <span className="settings-span">Jméno</span>
         <input
           id="name"
           type="text"
-          className="profile-input"
+          className="settings-input"
           value={updateForm.firstName}
           onChange={(e) =>
             setUpdateForm((prev) => ({
@@ -34,12 +34,12 @@ const EditProfile = ({
           }
         />
       </label>
-      <label htmlFor="surname" className="profile-label">
-        <span className="profile-span">Příjmení</span>
+      <label htmlFor="surname" className="settings-label">
+        <span className="settings-span">Příjmení</span>
         <input
           id="surname"
           type="text"
-          className="profile-input"
+          className="settings-input"
           value={updateForm.lastName}
           onChange={(e) =>
             setUpdateForm((prev) => ({
@@ -49,8 +49,8 @@ const EditProfile = ({
           }
         />
       </label>
-      <label htmlFor="about" className="profile-label">
-        <span className="profile-span">Popis</span>
+      <label htmlFor="about" className="settings-label">
+        <span className="settings-span">Popis</span>
         <textarea
           id="about"
           cols={64}
@@ -85,7 +85,7 @@ const EditProfile = ({
         )}
       </label>
       <input id="photo" type="file" accept="image/*" className="hidden" />
-      <div className="profile-label justify-end">
+      <div className="settings-label justify-end">
         <SubmitButton value="Uložit" />
       </div>
     </form>
