@@ -20,7 +20,7 @@ const EditProfile = ({
       className="my-8 gap-y-4 flex flex-col relative"
     >
       <label htmlFor="name" className="profile-label">
-        <span className="profile-span">Jméno:</span>
+        <span className="profile-span">Jméno</span>
         <input
           id="name"
           type="text"
@@ -35,7 +35,7 @@ const EditProfile = ({
         />
       </label>
       <label htmlFor="surname" className="profile-label">
-        <span className="profile-span">Příjmení:</span>
+        <span className="profile-span">Příjmení</span>
         <input
           id="surname"
           type="text"
@@ -50,7 +50,7 @@ const EditProfile = ({
         />
       </label>
       <label htmlFor="about" className="profile-label">
-        <span className="profile-span">Popis:</span>
+        <span className="profile-span">Popis</span>
         <textarea
           id="about"
           cols={64}
@@ -85,10 +85,9 @@ const EditProfile = ({
         )}
       </label>
       <input id="photo" type="file" accept="image/*" className="hidden" />
-      <SubmitButton
-        className="relative self-end right-[271px]"
-        value="Uložit"
-      />
+      <div className="profile-label justify-end">
+        <SubmitButton value="Uložit" />
+      </div>
     </form>
   )
 }

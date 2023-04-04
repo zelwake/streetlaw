@@ -20,7 +20,7 @@ const Profile = ({
   const editProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (updateForm.firstName.trim() || updateForm.lastName.trim())
+    if (!updateForm.firstName.trim() || !updateForm.lastName.trim())
       return alert('Chybí jméno nebo příjmení.')
 
     try {

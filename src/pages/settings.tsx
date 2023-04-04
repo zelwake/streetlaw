@@ -7,7 +7,7 @@ import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import { checkToken } from '@/scripts/api/checkToken'
 import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
-import { UserUnique, getUser } from '@/scripts/database/getUser'
+import { getUser } from '@/scripts/database/getUser'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
@@ -72,12 +72,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     if (!verification)
       return {
         redirect: {
-          destination: '/401?error=unauthorized',
+          destination: '/',
           permanent: false,
         },
       }
 
-    const user = await getUser(token?.sub as string, UserUnique.id)
+    const user = await getUser(token?.sub as string)
+
+    console.log(user)
 
     return {
       props: { data: user },
@@ -86,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     console.log(e)
     return {
       redirect: {
-        destination: '/500?error=internalservererror',
+        destination: '/error?error=500',
         permanent: false,
       },
     }

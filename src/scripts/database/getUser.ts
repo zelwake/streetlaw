@@ -1,19 +1,16 @@
 import prisma from '@/lib/prisma'
 
-export enum UserUnique {
-  'email' = 'email',
-  'id' = 'id',
-}
-
-export async function getUser(
-  value: string,
-  column: UserUnique
-): Promise<boolean> {
-  const result = await prisma.user.findUnique({
+export async function getUser(id: string) {
+  return await prisma.user.findUnique({
     where: {
-      [column]: value,
+      id,
+    },
+    select: {
+      firstName: true,
+      lastName: true,
+      description: true,
+      photoUrl: true,
+      roleId: true,
     },
   })
-
-  return !(result === null)
 }
