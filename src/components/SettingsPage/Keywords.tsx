@@ -1,3 +1,4 @@
+import DatabaseForm from '@/components/Forms/DatabaseForm'
 import useCategoryList from '@/hooks/useCategoryList'
 import useKeywordsList from '@/hooks/useKeywordsList'
 import { Lesson_keyword } from '@prisma/client'
@@ -6,7 +7,6 @@ import {
   settingsDatabasePOSTInterface,
 } from '@projectType/apiInterface'
 import { useEffect, useState } from 'react'
-import DatabaseForm from '../Forms/DatabaseForm'
 
 const Keywords = () => {
   const [group, setGroup] = useState<'lessons' | 'materials'>('lessons')
@@ -156,54 +156,47 @@ const Keywords = () => {
     }
   }
 
-  if (categories.length) {
-    return (
-      <div className="p-5">
-        <section className="grid grid-cols-2 mb-5">
-          <h1
-            className={`text-4xl cursor-pointer w-fit  ${
-              group == 'lessons' ? 'font-bold text-black' : 'text-gray-400'
-            }`}
-            onClick={() => {
-              setGroup('lessons')
-              setSelected(0)
-              setKeywords([])
-            }}
-          >
-            Lekce
-          </h1>
-          <h1
-            className={`text-4xl cursor-pointer w-fit  ${
-              group == 'materials' ? 'font-bold text-black' : 'text-gray-400'
-            }`}
-            onClick={() => {
-              setGroup('materials')
-              setSelected(0)
-              setKeywords([])
-            }}
-          >
-            Materiály
-          </h1>
-        </section>
-        <DatabaseForm
-          addRelation={addRelation}
-          addValue={addValue}
-          categories={categories}
-          fetchKeywordsGroup={fetchKeywordsGroup}
-          keywords={keywords}
-          keywordsList={keywordsList}
-          removeRelation={removeRelation}
-          selected={selected}
-          setAddValue={setAddValue}
-          message={responseMessage}
-        />
-      </div>
-    )
-  }
   return (
-    <h1 className="w-full text-center h-full pt-10 text-5xl font-semibold text-red-600">
-      Nemáte přístup k této funkci.
-    </h1>
+    <div className="p-5">
+      <section className="grid grid-cols-2 mb-5">
+        <h1
+          className={`text-4xl cursor-pointer w-fit  ${
+            group == 'lessons' ? 'font-bold text-black' : 'text-gray-400'
+          }`}
+          onClick={() => {
+            setGroup('lessons')
+            setSelected(0)
+            setKeywords([])
+          }}
+        >
+          Lekce
+        </h1>
+        <h1
+          className={`text-4xl cursor-pointer w-fit  ${
+            group == 'materials' ? 'font-bold text-black' : 'text-gray-400'
+          }`}
+          onClick={() => {
+            setGroup('materials')
+            setSelected(0)
+            setKeywords([])
+          }}
+        >
+          Materiály
+        </h1>
+      </section>
+      <DatabaseForm
+        addRelation={addRelation}
+        addValue={addValue}
+        categories={categories}
+        fetchKeywordsGroup={fetchKeywordsGroup}
+        keywords={keywords}
+        keywordsList={keywordsList}
+        removeRelation={removeRelation}
+        selected={selected}
+        setAddValue={setAddValue}
+        message={responseMessage}
+      />
+    </div>
   )
 }
 
