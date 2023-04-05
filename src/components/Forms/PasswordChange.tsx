@@ -56,7 +56,7 @@ const PasswordChange = ({
       </div>
       <AlertMessage
         message={message}
-        className="left-1/2 top-1/3 w-1/2 text-center text-gray-500 text-xl"
+        className="left-1/2 top-1/3 w-1/2 text-center"
       />
     </form>
   )

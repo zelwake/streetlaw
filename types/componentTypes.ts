@@ -22,14 +22,15 @@ export type SubmenuType = {
   slug: string
 }[]
 
-export type DatabaseFormType = {
+export type DatabaseFormProps = {
   categories: Keyword_lesson_category[] | Keyword_material_category[]
   keywordsList: Lesson_keyword[] | Material_keyword[]
   selected: number
   keywords: Lesson_keyword[] | Material_keyword[]
   addValue: number
+  message: string
   fetchKeywordsGroup: (id: number) => Promise<void>
-  removeRelation: (id: number) => Promise<void>
+  removeRelation: (id: number, name: string) => Promise<void>
   addRelation: (e: FormEvent) => Promise<void>
   setAddValue: Dispatch<SetStateAction<number>>
 }

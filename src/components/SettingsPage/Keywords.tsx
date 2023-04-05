@@ -5,7 +5,7 @@ import {
   settingsDatabaseDELETEInterface,
   settingsDatabasePOSTInterface,
 } from '@projectType/apiInterface'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DatabaseForm from '../Forms/DatabaseForm'
 
 const Keywords = () => {
@@ -13,9 +13,18 @@ const Keywords = () => {
   const [selected, setSelected] = useState<number>(0)
   const [keywords, setKeywords] = useState<Lesson_keyword[]>([])
   const [addValue, setAddValue] = useState<number>(0)
+  const [responseMessage, setResponseMessage] = useState<string>('')
 
   const categories = useCategoryList(group)
   const keywordsList = useKeywordsList(group)
+
+  useEffect(() => {
+    setAddValue(0)
+  }, [group, selected])
+
+  useEffect(() => {
+    setResponseMessage('')
+  }, [group, selected, addValue])
 
   const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
@@ -41,19 +50,19 @@ const Keywords = () => {
           break
         }
         case 404: {
-          return alert('Neexistuje')
+          return setResponseMessage('Neexistuje.')
         }
         case 500:
         default: {
-          return alert('Něco se pokazilo. Opakujte akci později.')
+          return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
         }
       }
     } catch (error) {
-      return alert('Něco se pokazilo. Opakujte akci později.')
+      return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
-  const removeRelation = async (id: number) => {
+  const removeRelation = async (id: number, name: string) => {
     const data: settingsDatabaseDELETEInterface = {
       keyword: id,
     }
@@ -72,22 +81,23 @@ const Keywords = () => {
 
       switch (send.status) {
         case 200:
+          setResponseMessage(`Klíčové slovo ${name} bylo úspěšně odebráno.`)
           return setKeywords((prev) => prev.filter((v) => v.id != id))
         case 400:
-          return alert('Chybně zadaný požadavek.')
+          return setResponseMessage('Chybně zadaný požadavek.')
         case 500:
         default:
-          return alert('Něco se pokazilo. Opakujte akci později.')
+          return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
       }
     } catch (error) {
-      return alert('Něco se pokazilo. Opakujte akci později.')
+      return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
   const addRelation = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (addValue == 0) return alert('Vyberte slovo k přidání.')
+    if (addValue == 0) return setResponseMessage('Vyberte slovo k přidání.')
 
     const data: settingsDatabasePOSTInterface = {
       keyword: addValue,
@@ -126,18 +136,23 @@ const Keywords = () => {
               a.word.localeCompare(b.word)
             )
           )
+          setResponseMessage(
+            `Klíčové slovo ${
+              (json as jsonData).data.word
+            } bylo úspěšně přidáno.`
+          )
 
           break
         case 400:
-          alert('Klíčové slovo už existuje')
+          setResponseMessage('Klíčové slovo už existuje.')
           break
         case 500:
         default:
-          alert('Něco se pokazilo. Opakujte akci později.')
+          setResponseMessage('Něco se pokazilo. Opakujte akci později.')
           break
       }
     } catch (error) {
-      alert('Něco se pokazilo. Opakujte akci později.')
+      setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
@@ -180,11 +195,16 @@ const Keywords = () => {
           removeRelation={removeRelation}
           selected={selected}
           setAddValue={setAddValue}
+          message={responseMessage}
         />
       </div>
     )
   }
-  return <h1>Nemáte přístup k této funkci</h1>
+  return (
+    <h1 className="w-full text-center h-full pt-10 text-5xl font-semibold text-red-600">
+      Nemáte přístup k této funkci.
+    </h1>
+  )
 }
 
 export default Keywords
