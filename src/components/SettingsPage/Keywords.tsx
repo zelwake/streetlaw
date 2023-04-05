@@ -1,3 +1,4 @@
+import DatabaseForm from '@/components/Forms/DatabaseForm'
 import useCategoryList from '@/hooks/useCategoryList'
 import useKeywordsList from '@/hooks/useKeywordsList'
 import { Lesson_keyword } from '@prisma/client'
@@ -5,17 +6,25 @@ import {
   settingsDatabaseDELETEInterface,
   settingsDatabasePOSTInterface,
 } from '@projectType/apiInterface'
-import { useState } from 'react'
-import DatabaseForm from '../Forms/DatabaseForm'
+import { useEffect, useState } from 'react'
 
 const Keywords = () => {
   const [group, setGroup] = useState<'lessons' | 'materials'>('lessons')
   const [selected, setSelected] = useState<number>(0)
   const [keywords, setKeywords] = useState<Lesson_keyword[]>([])
   const [addValue, setAddValue] = useState<number>(0)
+  const [responseMessage, setResponseMessage] = useState<string>('')
 
   const categories = useCategoryList(group)
   const keywordsList = useKeywordsList(group)
+
+  useEffect(() => {
+    setAddValue(0)
+  }, [group, selected])
+
+  useEffect(() => {
+    setResponseMessage('')
+  }, [group, selected, addValue])
 
   const fetchKeywordsGroup = async (id: number) => {
     setSelected(id)
@@ -41,19 +50,19 @@ const Keywords = () => {
           break
         }
         case 404: {
-          return alert('Neexistuje')
+          return setResponseMessage('Neexistuje.')
         }
         case 500:
         default: {
-          return alert('Něco se pokazilo. Opakujte akci později.')
+          return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
         }
       }
     } catch (error) {
-      return alert('Něco se pokazilo. Opakujte akci později.')
+      return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
-  const removeRelation = async (id: number) => {
+  const removeRelation = async (id: number, name: string) => {
     const data: settingsDatabaseDELETEInterface = {
       keyword: id,
     }
@@ -72,22 +81,23 @@ const Keywords = () => {
 
       switch (send.status) {
         case 200:
+          setResponseMessage(`Klíčové slovo ${name} bylo úspěšně odebráno.`)
           return setKeywords((prev) => prev.filter((v) => v.id != id))
         case 400:
-          return alert('Chybně zadaný požadavek.')
+          return setResponseMessage('Chybně zadaný požadavek.')
         case 500:
         default:
-          return alert('Něco se pokazilo. Opakujte akci později.')
+          return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
       }
     } catch (error) {
-      return alert('Něco se pokazilo. Opakujte akci později.')
+      return setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
   const addRelation = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (addValue == 0) return alert('Vyberte slovo k přidání.')
+    if (addValue == 0) return setResponseMessage('Vyberte slovo k přidání.')
 
     const data: settingsDatabasePOSTInterface = {
       keyword: addValue,
@@ -126,65 +136,68 @@ const Keywords = () => {
               a.word.localeCompare(b.word)
             )
           )
+          setResponseMessage(
+            `Klíčové slovo ${
+              (json as jsonData).data.word
+            } bylo úspěšně přidáno.`
+          )
 
           break
         case 400:
-          alert('Klíčové slovo už existuje')
+          setResponseMessage('Klíčové slovo už existuje.')
           break
         case 500:
         default:
-          alert('Něco se pokazilo. Opakujte akci později.')
+          setResponseMessage('Něco se pokazilo. Opakujte akci později.')
           break
       }
     } catch (error) {
-      alert('Něco se pokazilo. Opakujte akci později.')
+      setResponseMessage('Něco se pokazilo. Opakujte akci později.')
     }
   }
 
-  if (categories.length) {
-    return (
-      <div className="p-5">
-        <section className="grid grid-cols-2 mb-5">
-          <h1
-            className={`text-4xl cursor-pointer w-fit  ${
-              group == 'lessons' ? 'font-bold text-black' : 'text-gray-400'
-            }`}
-            onClick={() => {
-              setGroup('lessons')
-              setSelected(0)
-              setKeywords([])
-            }}
-          >
-            Lekce
-          </h1>
-          <h1
-            className={`text-4xl cursor-pointer w-fit  ${
-              group == 'materials' ? 'font-bold text-black' : 'text-gray-400'
-            }`}
-            onClick={() => {
-              setGroup('materials')
-              setSelected(0)
-              setKeywords([])
-            }}
-          >
-            Materiály
-          </h1>
-        </section>
-        <DatabaseForm
-          addRelation={addRelation}
-          addValue={addValue}
-          categories={categories}
-          fetchKeywordsGroup={fetchKeywordsGroup}
-          keywords={keywords}
-          keywordsList={keywordsList}
-          removeRelation={removeRelation}
-          selected={selected}
-          setAddValue={setAddValue}
-        />
-      </div>
-    )
-  }
-  return <h1>Nemáte přístup k této funkci</h1>
+  return (
+    <div className="p-5">
+      <section className="grid grid-cols-2 mb-5">
+        <h1
+          className={`text-4xl cursor-pointer w-fit  ${
+            group == 'lessons' ? 'font-bold text-black' : 'text-gray-400'
+          }`}
+          onClick={() => {
+            setGroup('lessons')
+            setSelected(0)
+            setKeywords([])
+          }}
+        >
+          Lekce
+        </h1>
+        <h1
+          className={`text-4xl cursor-pointer w-fit  ${
+            group == 'materials' ? 'font-bold text-black' : 'text-gray-400'
+          }`}
+          onClick={() => {
+            setGroup('materials')
+            setSelected(0)
+            setKeywords([])
+          }}
+        >
+          Materiály
+        </h1>
+      </section>
+      <DatabaseForm
+        addRelation={addRelation}
+        addValue={addValue}
+        categories={categories}
+        fetchKeywordsGroup={fetchKeywordsGroup}
+        keywords={keywords}
+        keywordsList={keywordsList}
+        removeRelation={removeRelation}
+        selected={selected}
+        setAddValue={setAddValue}
+        message={responseMessage}
+      />
+    </div>
+  )
 }
 
 export default Keywords

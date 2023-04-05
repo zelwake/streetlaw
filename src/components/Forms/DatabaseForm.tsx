@@ -1,4 +1,5 @@
-import { DatabaseFormType } from '@projectType/componentTypes'
+import { DatabaseFormProps } from '@projectType/componentTypes'
+import AlertMessage from '../AlertMessage'
 
 const DatabaseForm = ({
   categories,
@@ -6,13 +7,14 @@ const DatabaseForm = ({
   selected,
   keywords,
   addValue,
+  message,
   fetchKeywordsGroup,
   removeRelation,
   addRelation,
   setAddValue,
-}: DatabaseFormType) => {
+}: DatabaseFormProps) => {
   return (
-    <section className="grid grid-cols-8 gap-x-4">
+    <section className="grid grid-cols-8 gap-x-4 relative">
       <ul className="col-span-2">
         {categories.map((v) => (
           <li
@@ -31,7 +33,7 @@ const DatabaseForm = ({
           <li key={v.id} className="flex justify-between mb-1">
             <p className="text-xl">{v.word}</p>
             <button
-              onClick={() => removeRelation(v.id)}
+              onClick={() => removeRelation(v.id, v.word)}
               className="bg-red-500 px-2 text-white hover:border-l-2 hover:border-l-red-900 "
             >
               Odebrat
@@ -62,6 +64,10 @@ const DatabaseForm = ({
           />
         </form>
       )}
+      <AlertMessage
+        message={message}
+        className="col-start-6 col-span-3 w-full top-28 text-center"
+      />
     </section>
   )
 }

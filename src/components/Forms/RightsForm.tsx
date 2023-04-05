@@ -77,10 +77,7 @@ const RightsForm = ({
               className="text-xl font-normal border-l-2 border-l-white"
             />
           </div>
-          <AlertMessage
-            message={updateMessage}
-            className="bottom-20 text-lg text-gray-400"
-          />
+          <AlertMessage message={updateMessage} className="bottom-20" />
         </form>
       )}
     </div>

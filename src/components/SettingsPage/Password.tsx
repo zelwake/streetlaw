@@ -45,7 +45,7 @@ const Password = () => {
         break
       case 500:
       default:
-        setResponseMessage('Něco se pokazilo. Zkuste to znova za chvíli.')
+        setResponseMessage('Něco se pokazilo. Opakujte akci později.')
         break
     }
   }

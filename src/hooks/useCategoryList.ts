@@ -19,8 +19,6 @@ export default function useCategoryList(group: 'lessons' | 'materials') {
 
     if (typeof body.data !== 'string') setCategories(body.data)
     else alert(body.data)
-
-    console.log(`fetched ${group}`)
   }, [group])
 
   useEffect(() => {

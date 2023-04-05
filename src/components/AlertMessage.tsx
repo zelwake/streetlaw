@@ -5,7 +5,9 @@ const AlertMessage = ({
   message: string
   className?: string | ''
 }) => {
-  return <p className={`absolute ${className}`}>{message}</p>
+  return (
+    <p className={`absolute text-lg text-gray-500 ${className}`}>{message}</p>
+  )
 }
 
 export default AlertMessage
