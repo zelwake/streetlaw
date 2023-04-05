@@ -44,10 +44,10 @@ export default async function handler(
       const hashed = await hashedPassword(newPassword)
 
       await updatePassword(token?.sub as string, hashed)
-      res.status(200).json({ data: 'Password changed' })
+      return res.status(200).json({ data: 'Password changed' })
     } catch (error) {
       console.log(error)
-      res.status(500).json({ data: 'Internal server error' })
+      return res.status(500).json({ data: 'Internal server error' })
     }
   }
 

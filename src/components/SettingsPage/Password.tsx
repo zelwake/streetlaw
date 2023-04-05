@@ -1,7 +1,6 @@
 import PasswordChange from '@/components/Forms/PasswordChange'
 import { validatePassword } from '@/scripts/validateCredentials'
-import { PasswordPUTInterface } from '@projectType/apiInterface'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export type PasswordsType = {
   oldPassword: string
@@ -12,13 +11,19 @@ const Password = () => {
     oldPassword: '',
     newPassword: '',
   })
+  const [responseMessage, setResponseMessage] = useState<string>('')
+
+  useEffect(() => {
+    setResponseMessage('')
+  }, [passwords])
 
   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setResponseMessage('')
 
     const valid = validatePassword(passwords.newPassword)
 
-    if (typeof valid == 'string') return alert(valid)
+    if (typeof valid == 'string') return setResponseMessage(valid)
 
     const response = await fetch('/api/auth/password', {
       method: 'PUT',
@@ -27,19 +32,20 @@ const Password = () => {
       },
       body: JSON.stringify(passwords),
     })
-    const body: PasswordPUTInterface = await response.json()
 
     switch (response.status) {
       case 200:
-        alert(body.data)
+        setResponseMessage('Heslo bylo úspěšně změněno.')
         break
       case 400:
-      case 401:
-      case 405:
-      case 500:
-        alert(body.data)
+        setResponseMessage('Heslo není správné.')
         break
+      case 401:
+        setResponseMessage('K této funkci nemáte přístup.')
+        break
+      case 500:
       default:
+        setResponseMessage('Něco se pokazilo. Zkuste to znova za chvíli.')
         break
     }
   }
@@ -49,6 +55,7 @@ const Password = () => {
       changePassword={changePassword}
       passwords={passwords}
       setPasswords={setPasswords}
+      message={responseMessage}
     />
   )
 }

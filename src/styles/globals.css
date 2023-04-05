@@ -19,15 +19,15 @@
     @apply flex w-3/4 items-baseline;
   }
 
-  .settings-input {
-    @apply border-b-2 grow border-b-gray-400 pl-3 pt-1 text-xl outline-none bg-gray-50;
+  .password-label {
+    @apply flex w-1/2 items-baseline;
   }
 
   .settings-span {
     @apply inline-block text-right w-32 pr-3 text-xl text-gray-500 font-semibold;
   }
 
-  .password-label {
-    @apply flex w-1/2 items-baseline;
+  .settings-input {
+    @apply border-b-2 grow border-b-gray-400 pl-3 pt-1 text-xl outline-none bg-gray-50;
   }
 }
