@@ -4,7 +4,7 @@ declare namespace NodeJS {
     readonly NEXT_AUTH_SECRET: string
 
     readonly DATABASE_URL: string
-    readonly WEBSITE_URL: string
+    readonly NEXT_PUBLIC_URL: string
 
     readonly NODEMAILER_PORT: number
     readonly NODEMAILER_HOST: string
