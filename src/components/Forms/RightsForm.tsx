@@ -79,7 +79,7 @@ const RightsForm = ({
           </div>
           <AlertMessage
             message={updateMessage}
-            style="bottom-20 text-lg text-gray-400"
+            className="bottom-20 text-lg text-gray-400"
           />
         </form>
       )}

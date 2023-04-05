@@ -1,11 +1,11 @@
 const AlertMessage = ({
   message,
-  style,
+  className,
 }: {
   message: string
-  style?: string | ''
+  className?: string | ''
 }) => {
-  return <p className={`absolute ${style}`}>{message}</p>
+  return <p className={`absolute ${className}`}>{message}</p>
 }
 
 export default AlertMessage
