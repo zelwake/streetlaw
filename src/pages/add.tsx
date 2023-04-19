@@ -1,11 +1,13 @@
-import { Editor } from '@tinymce/tinymce-react'
+import Footer from '@/components/WebLayout/Footer'
+import Header from '@/components/WebLayout/Header'
+import { NextPage } from 'next'
 
-const Add = () => {
+const Add: NextPage = ({}) => {
   return (
-    <Editor
-      tinymceScriptSrc={`${process.env.NEXT_PUBLIC_URL}/tinymce/tinymce.min.js`}
-      //   tinymceScriptSrc={'http://localhost:3000/tinymce/tinymce.min.js'}
-    />
+    <>
+      <Header />
+      <Footer />
+    </>
   )
 }
 

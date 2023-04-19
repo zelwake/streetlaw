@@ -63,7 +63,7 @@ const NavigationBar = () => {
       {session && (
         <div className="mr-16">
           {/* on user-role 3+ */}
-          <MenuItem path="/#" name="Přidat" />
+          <MenuItem path="/add" name="Přidat" />
           {/* on user-role 2+ */}
           <MenuItem path="/settings" name="Nastavení" />
           {/* on user-role 1+ */}
