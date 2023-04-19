@@ -1,3 +1,4 @@
+import PageHeader from '@/components/Hero/PageHeading'
 import ProfilePageMenu from '@/components/Menu/ProfilePageMenu'
 import Keywords from '@/components/SettingsPage/Keywords'
 import Password from '@/components/SettingsPage/Password'
@@ -10,6 +11,7 @@ import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import { getUser } from '@/scripts/database/getUser'
 import { User } from '@prisma/client'
 import { SubmenuType } from '@projectType/componentTypes'
+import { JWT } from 'next-auth/jwt'
 import { GetServerSideProps } from 'next/types'
 import { useState } from 'react'
 
@@ -43,19 +45,15 @@ const ProfilePage = ({ data }: { data: User }) => {
   return (
     <>
       <Header />
-      <div className="m-auto w-sl">
-        <section className="w-full h-24 bg-streetlaw-500 pl-5 flex items-center">
-          <h1 className="text-6xl tracking-wide font-semibold text-white">
-            Nastavení
-          </h1>
-        </section>
+      <main className="m-auto w-sl">
+        <PageHeader heading="Nastavení" />
         <section className="w-full mt-20 shadow-sl flex">
           <ProfilePageMenu setSlug={setSlug} slug={slug} submenu={submenu} />
           <div className="border-l-[1px] w-[1085px] border-black">
             {rightPanel()}
           </div>
         </section>
-      </div>
+      </main>
       <Footer />
     </>
   )
@@ -77,9 +75,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         },
       }
 
-    const user = await getUser(token?.sub as string)
-
-    console.log(user)
+    const user = await getUser((token as JWT).sub as string)
 
     return {
       props: { data: user },
