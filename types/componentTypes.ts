@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Keyword_lesson_category,
   Keyword_material_category,
@@ -5,6 +6,7 @@ import {
   Material_keyword,
 } from '@prisma/client'
 import { Dispatch, FormEvent, SetStateAction } from 'react'
+import { Editor } from 'tinymce'
 
 export type NewsType = {
   date: string
@@ -38,4 +40,17 @@ export type DatabaseFormProps = {
 export type UserRoleForm = {
   email: string
   roleId: number
+}
+
+export type ContentEditorRef = Editor | null
+
+export type EditorEvent = {
+  readonly type: string
+  readonly target: any
+  readonly isDefaultPrevented: () => boolean
+  readonly preventDefault: () => void
+  readonly isPropagationStopped: () => boolean
+  readonly stopPropagation: () => void
+  readonly isImmediatePropagationStopped: () => boolean
+  readonly stopImmediatePropagation: () => void
 }

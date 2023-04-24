@@ -1,16 +1,16 @@
+import ContentEditor from '@/components/Editor/ContentEditor'
 import PageHeader from '@/components/Hero/PageHeading'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import { checkToken } from '@/scripts/api/checkToken'
 import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
-import { Editor } from '@tinymce/tinymce-react'
+import { ContentEditorRef } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next'
 import { JWT } from 'next-auth/jwt'
 import { useRef } from 'react'
-import { Editor as TinyMCEEditor } from 'tinymce'
 
-const Add = ({ data }: { data: JWT }) => {
-  const editorRef = useRef<TinyMCEEditor | null>(null)
+const Add = ({ id }: { id: string }) => {
+  const editorRef = useRef<ContentEditorRef>(null)
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent())
@@ -29,29 +29,8 @@ const Add = ({ data }: { data: JWT }) => {
           </div>
         </section>
         <section>
-          <Editor
-            tinymceScriptSrc={
-              process.env.NEXT_PUBLIC_URL + '/tinymce/tinymce.min.js'
-            }
-            onInit={(evt, editor) => (editorRef.current = editor)}
-            initialValue="<p>This is the initial content of the editor.</p>"
-            init={{
-              height: 500,
-              menubar: false,
-              plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount',
-              ],
-              toolbar:
-                'undo redo | formatselect | ' +
-                'bold italic backcolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-              content_style:
-                'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-            }}
-          />
+          <ContentEditor editorId="add" ref={editorRef} />
+          <button onClick={log}>Click</button>
         </section>
       </main>
       <Footer />
@@ -69,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (verification)
       return {
-        props: { data: token },
+        props: { id: (token as JWT).sub },
       }
     else
       return {
