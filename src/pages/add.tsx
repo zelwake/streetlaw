@@ -6,7 +6,6 @@ import { checkToken } from '@/scripts/api/checkToken'
 import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import { ContentEditorRef } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next'
-import { JWT } from 'next-auth/jwt'
 import { useRef, useState } from 'react'
 
 enum PostCategory {
@@ -14,7 +13,7 @@ enum PostCategory {
   posts,
 }
 
-const Add = ({ id }: { id: string }) => {
+const Add = () => {
   const editorRef = useRef<ContentEditorRef>(null)
   const [title, setTitle] = useState<string>('')
   const [category, setCategory] = useState<PostCategory>(PostCategory.news)
@@ -33,9 +32,6 @@ const Add = ({ id }: { id: string }) => {
         },
         body: JSON.stringify(body),
       })
-      console.log(adder)
-      const responseText = await adder.json()
-      console.log(responseText)
     }
   }
 
@@ -77,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (verification)
       return {
-        props: { id: (token as JWT).sub },
+        props: {},
       }
     else
       return {

@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma'
 import { checkToken } from '@/scripts/api/checkToken'
-import { urlFormatter } from '@/scripts/urlFormatter'
+import { urlFormatter } from '@/scripts/textFormatting/urlFormatter'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(

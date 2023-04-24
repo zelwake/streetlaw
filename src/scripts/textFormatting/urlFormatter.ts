@@ -1,6 +1,11 @@
+import { removeDiacritics } from './removeDiacritic'
+
 export function urlFormatter(str: string): string {
+  // Replace diacritics and make all letters lowercase
+  let text = removeDiacritics(str).toLowerCase().trim()
+
   // Replace all spaces with hyphens
-  const text = str.replaceAll(' ', '-')
+  text = text.replaceAll(' ', '-')
 
   // Create a date object with the current date and time
   const date = new Date()
