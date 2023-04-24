@@ -7,13 +7,35 @@ import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import { ContentEditorRef } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next'
 import { JWT } from 'next-auth/jwt'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+
+enum PostCategory {
+  news = 1,
+  posts,
+}
 
 const Add = ({ id }: { id: string }) => {
   const editorRef = useRef<ContentEditorRef>(null)
-  const log = () => {
+  const [title, setTitle] = useState<string>('')
+  const [category, setCategory] = useState<PostCategory>(PostCategory.news)
+
+  const log = async () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent())
+      const body = {
+        categoryId: category,
+        title,
+        text: editorRef.current.getContent(),
+      }
+      const adder = await fetch('/api/add', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+      console.log(adder)
+      const responseText = await adder.json()
+      console.log(responseText)
     }
   }
 
@@ -24,11 +46,18 @@ const Add = ({ id }: { id: string }) => {
         <PageHeader heading="Přidat" />
         <section className="w-full mt-20 shadow-sl flex">
           <div className="p-5 w-full grid grid-cols-2">
-            <h2>Aktualita</h2>
-            <h2>Článek</h2>
+            <h2 onClick={() => setCategory(PostCategory.news)}>Aktualita</h2>
+            <h2 onClick={() => setCategory(PostCategory.posts)}>Článek</h2>
           </div>
         </section>
         <section>
+          <label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </label>
           <ContentEditor editorId="add" ref={editorRef} />
           <button onClick={log}>Click</button>
         </section>
