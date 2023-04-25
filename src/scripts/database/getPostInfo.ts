@@ -6,7 +6,12 @@ export async function getPostInfo(route: string): Promise<PostInfo | null> {
     where: {
       id: route,
     },
-    include: {
+    select: {
+      title: true,
+      detail: true,
+      createdAt: true,
+      changed: true,
+      changedAt: true,
       Post_category: {
         select: {
           name: true,

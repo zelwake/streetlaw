@@ -56,7 +56,10 @@ export type EditorEvent = {
   readonly stopImmediatePropagation: () => void
 }
 
-export type PostInfo = Post & {
+export type PostInfo = Pick<
+  Post,
+  'title' | 'detail' | 'createdAt' | 'changed' | 'changedAt'
+> & {
   Post_category: {
     name: string
   }
