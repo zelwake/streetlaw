@@ -4,6 +4,7 @@ import {
   Keyword_material_category,
   Lesson_keyword,
   Material_keyword,
+  Post,
 } from '@prisma/client'
 import { Dispatch, FormEvent, SetStateAction } from 'react'
 import { Editor } from 'tinymce'
@@ -53,4 +54,22 @@ export type EditorEvent = {
   readonly stopPropagation: () => void
   readonly isImmediatePropagationStopped: () => boolean
   readonly stopImmediatePropagation: () => void
+}
+
+export type PostInfo = Post & {
+  Post_category: {
+    name: string
+  }
+  creator: {
+    firstName: string
+    lastName: string
+  }
+  changedBy: {
+    firstName: string
+    lastName: string
+  } | null
+}
+
+export type PostInfoProps = {
+  data: PostInfo
 }

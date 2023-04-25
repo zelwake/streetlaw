@@ -3,33 +3,29 @@ import PageHeader from '@/components/Hero/PageHeading'
 import Footer from '@/components/WebLayout/Footer'
 import Header from '@/components/WebLayout/Header'
 import Main from '@/components/WebLayout/Main'
-import prisma from '@/lib/prisma'
-import { Post } from '@prisma/client'
+import { getPostInfo } from '@/scripts/database/getPostInfo'
+import { fullUsername } from '@/scripts/textFormatting/fullUsername'
+import { localeDateString } from '@/scripts/timeDate/locateDateString'
+import { PostInfoProps } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
 
-type NewsInfo = {
-  data: Post & {
-    Post_category: {
-      name: string
-    }
-    creator: {
-      firstName: string
-      lastName: string
-    }
-    changedBy: {
-      firstName: string
-      lastName: string
-    } | null
-  }
-}
-
-const NewsPage = ({ data }: NewsInfo) => {
+const NewsPage = ({ data }: PostInfoProps) => {
   return (
     <>
       <Header />
       <Main>
         <PageHeader heading={data.title} />
         <ContentStyle />
+        <div className="flex flex-row-reverse gap-4 pr-4">
+          <time className="italic">{localeDateString(data.createdAt)}</time>
+          <h3>{fullUsername(data.creator)}</h3>
+          {data.changed && data.changedBy && data.changedAt && (
+            <p>
+              Naposledy změněno {localeDateString(data.changedAt)} uživatelem{' '}
+              {fullUsername(data.changedBy)}
+            </p>
+          )}
+        </div>
         <article
           className="news-info"
           dangerouslySetInnerHTML={{ __html: data.detail }}
@@ -47,30 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   if (route) {
     route = route as string
-    const info = await prisma.post.findUnique({
-      where: {
-        id: route,
-      },
-      include: {
-        Post_category: {
-          select: {
-            name: true,
-          },
-        },
-        creator: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-        changedBy: {
-          select: {
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    })
+    const info = await getPostInfo(route)
 
     if (info && info.Post_category.name == 'news') {
       return {
