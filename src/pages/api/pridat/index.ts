@@ -3,6 +3,13 @@ import { checkToken } from '@/scripts/api/checkToken'
 import { urlFormatter } from '@/scripts/textFormatting/urlFormatter'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+enum PostCategory {
+  'news' = 'aktuality',
+  'media-coverage' = 'medialni-ohlasy',
+}
+
+type NewsType = 'news' | 'media-coverage'
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -31,11 +38,13 @@ export default async function handler(
 
         const id = urlFormatter(title)
 
+        const categoryName = PostCategory[category.name as NewsType]
+
         const add = await prisma.post.create({
           data: {
             id,
             title: title.trim(),
-            urlPath: `/${category.name}/${id}`,
+            urlPath: `/${categoryName}/${id}`,
             creatorId: token?.sub as string,
             categoryId,
             detail: text,
@@ -44,7 +53,7 @@ export default async function handler(
 
         console.log(add)
         return res.status(201).json({
-          message: `${process.env.NEXT_PUBLIC_URL}/${category.name}/${id}`,
+          message: `${process.env.NEXT_PUBLIC_URL}/${add.urlPath}`,
         })
       } catch (error) {
         console.log(error)

@@ -6,14 +6,17 @@ import { checkToken } from '@/scripts/api/checkToken'
 import { AuthorizationLevel, checkRoleLevel } from '@/scripts/api/rights'
 import { ContentEditorRef } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 
 enum PostCategory {
   news = 1,
-  posts,
+  mediaCoverage,
 }
 
 const Add = () => {
+  const route = useRouter()
+
   const editorRef = useRef<ContentEditorRef>(null)
   const [title, setTitle] = useState<string>('')
   const [category, setCategory] = useState<PostCategory>(PostCategory.news)
@@ -32,6 +35,18 @@ const Add = () => {
         },
         body: JSON.stringify(body),
       })
+
+      const json = await adder.json()
+
+      switch (adder.status) {
+        case 201:
+          return route.replace(json.message)
+        case 400:
+        case 401:
+        case 500:
+        default:
+          alert(json.error || 'something went terribly wrong')
+      }
     }
   }
 
@@ -42,8 +57,10 @@ const Add = () => {
         <PageHeader heading="Přidat" />
         <section className="w-full mt-20 shadow-sl flex">
           <div className="p-5 w-full grid grid-cols-2">
-            <h2 onClick={() => setCategory(PostCategory.news)}>Aktualita</h2>
-            <h2 onClick={() => setCategory(PostCategory.posts)}>Článek</h2>
+            <h2 onClick={() => setCategory(PostCategory.news)}>Aktuality</h2>
+            <h2 onClick={() => setCategory(PostCategory.mediaCoverage)}>
+              Mediální ohlasy
+            </h2>
           </div>
         </section>
         <section>
