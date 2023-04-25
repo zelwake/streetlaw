@@ -34,7 +34,7 @@ export default async function handler(
         const add = await prisma.post.create({
           data: {
             id,
-            title,
+            title: title.trim(),
             urlPath: `/${category.name}/${id}`,
             creatorId: token?.sub as string,
             categoryId,
