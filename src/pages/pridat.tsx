@@ -25,7 +25,7 @@ const Add = () => {
         title,
         text: editorRef.current.getContent(),
       }
-      const adder = await fetch('/api/add', {
+      const adder = await fetch('/api/pridat', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
