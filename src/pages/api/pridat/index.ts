@@ -51,7 +51,6 @@ export default async function handler(
           },
         })
 
-        console.log(add)
         return res.status(201).json({
           message: `${process.env.NEXT_PUBLIC_URL}/${add.urlPath}`,
         })

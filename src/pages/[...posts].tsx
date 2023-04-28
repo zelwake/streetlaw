@@ -5,6 +5,7 @@ import Header from '@/components/WebLayout/Header'
 import Main from '@/components/WebLayout/Main'
 import { getPostInfo } from '@/scripts/database/getPostInfo'
 import { fullUsername } from '@/scripts/textFormatting/fullUsername'
+import { prismaJSON } from '@/scripts/textFormatting/prismaJSON'
 import { localeDateString } from '@/scripts/timeDate/locateDateString'
 import { PostInfoProps } from '@projectType/componentTypes'
 import { GetServerSideProps } from 'next/types'
@@ -38,17 +39,24 @@ const NewsPage = ({ data }: PostInfoProps) => {
 
 export default NewsPage
 
+enum CategoryPost {
+  'aktuality' = 'news',
+  'medialni-ohlasy' = 'media-coverage',
+}
+
+type CategoryType = 'aktuality' | 'medialni-ohlasy'
+
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  let route = query.page
+  const { posts } = query
 
-  if (route) {
-    route = route as string
-    const info = await getPostInfo(route)
+  if (posts) {
+    const [category, post] = posts as [CategoryType, string]
+    const info = await getPostInfo(post)
 
-    if (info && info.Post_category.name == 'news') {
+    if (info && info.Post_category.name == CategoryPost[category]) {
       return {
         props: {
-          data: JSON.parse(JSON.stringify(info)),
+          data: prismaJSON(info),
         },
       }
     }
