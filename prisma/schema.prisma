@@ -59,15 +59,15 @@ model Post {
   urlPath     String    @map("url_path")
   categoryId  Int
   title       String
-  detail      String
+  detail      String    @db.Text
   creatorId   String
   createdAt   DateTime  @default(now()) @map("created_at")
   changed     Boolean   @default(false)
-  changedById String    @map("changed_by")
+  changedById String?   @map("changed_by")
   changedAt   DateTime? @map("changed_at")
 
   creator       User          @relation("postCreator", fields: [creatorId], references: [id])
-  changedBy     User          @relation("postChangedBy", fields: [changedById], references: [id])
+  changedBy     User?         @relation("postChangedBy", fields: [changedById], references: [id])
   Post_category Post_category @relation(fields: [categoryId], references: [id])
 
   @@index([creatorId])
